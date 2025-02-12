@@ -55,4 +55,17 @@ public class EmployeeController {
 
         return ResponseEntity.ok(responseBody);
     }
+
+    @PutMapping("/api/employee/{employeeId}")
+    public ResponseEntity<ResponseDTO> deleteEmployeeById(@PathVariable int employeeId) throws Exception {
+        log.info("delete employee by Id");
+
+        Map<String, Integer> data = new HashMap<>();
+        EmployeeModel body = employeeService.deleteEmployeeById(employeeId);
+        data.put("employeeId",body.getEmployeeId());
+        ResponseDTO responseBody = new ResponseDTO("Employee deleted successfully",200,data,null);
+
+        return ResponseEntity.ok(responseBody);
+    }
+
 }

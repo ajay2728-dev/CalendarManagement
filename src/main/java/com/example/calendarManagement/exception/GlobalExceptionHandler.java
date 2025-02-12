@@ -11,8 +11,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(EmployeeMissingInputException.class)
-    public ResponseEntity<ResponseDTO> handleEmployeeMissingInputException(EmployeeMissingInputException ex){
+    @ExceptionHandler(MissingFieldException.class)
+    public ResponseEntity<ResponseDTO> handleEmployeeMissingInputException(MissingFieldException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
@@ -20,8 +20,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(EmployeeInvalidEmailException.class)
-    public ResponseEntity<ResponseDTO> handleEmployeeInvalidEmailException(EmployeeInvalidEmailException ex){
+    @ExceptionHandler(InvalidFieldException.class)
+    public ResponseEntity<ResponseDTO> handleEmployeeInvalidEmailException(InvalidFieldException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
@@ -29,8 +29,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(NonUniqueEmployeeEmailException.class)
-    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueEmployeeEmailException ex){
+    @ExceptionHandler(NonUniqueFieldException.class)
+    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueFieldException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
@@ -38,8 +38,8 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(NotFoundEmployeeException.class)
-    public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundEmployeeException ex){
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 

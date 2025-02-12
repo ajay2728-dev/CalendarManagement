@@ -1,10 +1,10 @@
 package com.example.calendarManagement;
 
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
-import com.example.calendarManagement.exception.EmployeeInvalidEmailException;
-import com.example.calendarManagement.exception.EmployeeMissingInputException;
-import com.example.calendarManagement.exception.NonUniqueEmployeeEmailException;
-import com.example.calendarManagement.exception.NotFoundEmployeeException;
+import com.example.calendarManagement.exception.InvalidFieldException;
+import com.example.calendarManagement.exception.MissingFieldException;
+import com.example.calendarManagement.exception.NonUniqueFieldException;
+import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.service.EmployeeService;
@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static java.util.List.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -81,7 +80,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void test_whenAddEmployee_givenMissingInput_ThrowEmployeeMissingInputException(){
-        EmployeeMissingInputException thrownException = assertThrows(EmployeeMissingInputException.class,()->{
+        MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
                     employeeService.addEmployee(missingInputEmployee);
                 }
         );
@@ -91,7 +90,7 @@ public class EmployeeServiceTest {
     @Test
     public void test_whenAddEmployee_givenInvalidEmail_ThrowEmployeeInvalidInputException() {
 
-        EmployeeInvalidEmailException thrownException = assertThrows(EmployeeInvalidEmailException.class,()->{
+        InvalidFieldException thrownException = assertThrows(InvalidFieldException.class,()->{
                     employeeService.addEmployee(invalidEmailEmployee);
                 }
         );
@@ -105,7 +104,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.of(new EmployeeModel(1, "John Doe", "john.doe@xyz.com",
                 "New York", true, 30000, "Engineering")));
 
-        NonUniqueEmployeeEmailException thrownException = assertThrows(NonUniqueEmployeeEmailException.class,()->{
+        NonUniqueFieldException thrownException = assertThrows(NonUniqueFieldException.class,()->{
                     employeeService.addEmployee(inputEmployee);
                 }
         );
@@ -131,7 +130,7 @@ public class EmployeeServiceTest {
 
         Mockito.when(employeeRepo.findById(100)).thenReturn(Optional.empty());
 
-        NotFoundEmployeeException thrownException = assertThrows(NotFoundEmployeeException.class,()->{
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
             employeeService.getEmployeeById(100);
         });
 
@@ -149,6 +148,22 @@ public class EmployeeServiceTest {
         assertThat(result.size()).isEqualTo(2);
         assertThat(result.get(0).getEmployeeEmail()).isEqualTo("john.doe@xyz.com");
         assertThat(result.get(1).getEmployeeEmail()).isEqualTo("ajay.singh@xyz.com");
+
+    }
+
+    @Test
+    public void test_WhenDeleteEmployee_givenValidId_DeleteEmployeeSuccess() throws Exception {
+
+       Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1, "John Doe", "New York" ,
+               "john.doe@xyz.com", true, 50000, "Engineering")));
+
+       Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(new EmployeeModel(1, "John Doe", "New York" ,
+               "john.doe@xyz.com", false, 50000, "Engineering"));
+
+       EmployeeModel result = employeeService.deleteEmployeeById(1);
+
+       assertThat(result.getActive()).isEqualTo(false);
+       assertThat(result.getEmployeeId()).isEqualTo(1);
 
     }
 
