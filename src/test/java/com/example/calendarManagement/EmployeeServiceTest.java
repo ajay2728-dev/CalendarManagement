@@ -16,8 +16,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import static java.util.List.*;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -29,6 +32,7 @@ public class EmployeeServiceTest {
     private EmployeeRequestDTO inputEmployee;
     private EmployeeRequestDTO missingInputEmployee;
     private EmployeeRequestDTO invalidEmailEmployee;
+    List<EmployeeModel> mockEmployees;
 
     @Mock
     EmployeeRepo employeeRepo;
@@ -50,6 +54,13 @@ public class EmployeeServiceTest {
 
         invalidEmailEmployee = new EmployeeRequestDTO(1, "John Doe", "New York",
                 "john.doe.com", true, 50000, "Engineering");
+        
+        mockEmployees = Arrays.asList(
+                new EmployeeModel(1, "John Doe", "New York",
+                        "john.doe@xyz.com", true, 50000, "Engineering"),
+                new EmployeeModel(1, "Ajay Singh", "Bangalore",
+                        "ajay.singh@xyz.com", true, 30000, "Engineering")
+        );
 
 
     }
@@ -127,4 +138,18 @@ public class EmployeeServiceTest {
         assertEquals("No employee exists with the given ID",thrownException.getMessage());
 
     }
+
+    @Test
+    public void test_WhenGetAllEmployee_RetrievedSuccess(){
+        Mockito.when(employeeRepo.findAll()).thenReturn(mockEmployees);
+
+        List<EmployeeModel> result = employeeService.getAllEmployee();
+
+        assertThat(result).isNotNull();
+        assertThat(result.size()).isEqualTo(2);
+        assertThat(result.get(0).getEmployeeEmail()).isEqualTo("john.doe@xyz.com");
+        assertThat(result.get(1).getEmployeeEmail()).isEqualTo("ajay.singh@xyz.com");
+
+    }
+
 }
