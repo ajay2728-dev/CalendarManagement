@@ -1,5 +1,6 @@
 package com.example.calendarManagement;
 
+import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.exception.EmployeeInvalidEmailException;
 import com.example.calendarManagement.exception.EmployeeMissingInputException;
 import com.example.calendarManagement.exception.NonUniqueEmployeeEmailException;
@@ -25,9 +26,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public class EmployeeServiceTest {
 
     private EmployeeModel savedEmployee;
-    private EmployeeModel inputEmployee;
-    private EmployeeModel missingInputEmployee;
-    private EmployeeModel invalidEmailEmployee;
+    private EmployeeRequestDTO inputEmployee;
+    private EmployeeRequestDTO missingInputEmployee;
+    private EmployeeRequestDTO invalidEmailEmployee;
 
     @Mock
     EmployeeRepo employeeRepo;
@@ -38,16 +39,16 @@ public class EmployeeServiceTest {
     @BeforeEach
     void setup(){
 
-        inputEmployee = new EmployeeModel(0, "John Doe", "New York",
+        inputEmployee = new EmployeeRequestDTO(0, "John Doe", "New York",
                 "john.doe@xyz.com", true, 50000, "Engineering");
 
         savedEmployee = new EmployeeModel(1, "John Doe", "New York",
                 "john.doe@xyz.com", true, 50000, "Engineering");
 
-        missingInputEmployee = new EmployeeModel(1, "John Doe", "New York",
+        missingInputEmployee = new EmployeeRequestDTO(1, "John Doe", "New York",
                 null, true, 50000, "Engineering");
 
-        invalidEmailEmployee = new EmployeeModel(1, "John Doe", "New York",
+        invalidEmailEmployee = new EmployeeRequestDTO(1, "John Doe", "New York",
                 "john.doe.com", true, 50000, "Engineering");
 
 
@@ -123,7 +124,7 @@ public class EmployeeServiceTest {
             employeeService.getEmployeeById(100);
         });
 
-        assertEquals("Employee Not Found",thrownException.getMessage());
+        assertEquals("No employee exists with the given ID",thrownException.getMessage());
 
     }
 }

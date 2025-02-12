@@ -1,5 +1,6 @@
 package com.example.calendarManagement.controller;
 
+import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.service.EmployeeService;
@@ -19,11 +20,11 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping("/api/employee")
-    public ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeModel employee){
+    public ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO){
         log.info("add employee controller..... ");
 
         Map<String, Object> data = new HashMap<>();
-        EmployeeModel body = employeeService.addEmployee(employee);
+        EmployeeModel body = employeeService.addEmployee(employeeRequestDTO);
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Employee added successfully",201,data,null);
 

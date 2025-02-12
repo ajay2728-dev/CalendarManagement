@@ -1,5 +1,6 @@
 package com.example.calendarManagement.service;
 
+import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.exception.EmployeeInvalidEmailException;
 import com.example.calendarManagement.exception.EmployeeMissingInputException;
 import com.example.calendarManagement.exception.NonUniqueEmployeeEmailException;
@@ -17,7 +18,7 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
 
-    public EmployeeModel addEmployee(EmployeeModel employee) {
+    public EmployeeModel addEmployee(EmployeeRequestDTO employee) {
         // checking missing input field
         if(employee.getEmployeeName()==null || employee.getEmployeeEmail()==null || employee.getDepartment()==null || employee.getOfficeLocation()==null || employee.getSalary()==0){
             throw new EmployeeMissingInputException("Missing Required Input");
