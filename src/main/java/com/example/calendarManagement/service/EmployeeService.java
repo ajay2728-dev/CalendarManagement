@@ -10,6 +10,7 @@ import com.example.calendarManagement.repository.EmployeeRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -70,5 +71,9 @@ public class EmployeeService {
                 employee.getActive(),
                 employee.getSalary(),
                 employee.getDepartment() );
+    }
+
+    public List<EmployeeModel> getAllEmployee() {
+        return employeeRepo.findAll();
     }
 }

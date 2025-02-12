@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -31,13 +32,25 @@ public class EmployeeController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @GetMapping("/api/employee")
+    public ResponseEntity<ResponseDTO> getAllEmployee(){
+        log.info("getting all employee info");
+
+        Map<String, Object> data = new HashMap<>();
+        List<EmployeeModel> body = employeeService.getAllEmployee();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
+
+        return ResponseEntity.ok(responseBody);
+    }
+
     @GetMapping("/api/employee/{employeeId}")
     public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable int employeeId){
         log.info("getting employee with Id ");
 
         Map<String, Object> data = new HashMap<>();
         EmployeeModel body = employeeService.getEmployeeById(employeeId);
-        data.put("body",body);
+        data.put("employee",body);
         ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
 
         return ResponseEntity.ok(responseBody);
