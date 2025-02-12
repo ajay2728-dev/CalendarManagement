@@ -19,19 +19,26 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping("/api/employee")
-    ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeModel employee){
+    public ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeModel employee){
         log.info("add employee controller..... ");
-        Map<String, Object> data = new HashMap<>();
 
+        Map<String, Object> data = new HashMap<>();
         EmployeeModel body = employeeService.addEmployee(employee);
-        data.put("data",body);
+        data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Employee added successfully",201,data,null);
+
         return ResponseEntity.ok(responseBody);
     }
 
     @GetMapping("/api/employee/{employeeId}")
-    public EmployeeModel getEmployeeById(@PathVariable int employeeId){
+    public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable int employeeId){
         log.info("getting employee with Id ");
-        return employeeService.getEmployeeById(employeeId);
+
+        Map<String, Object> data = new HashMap<>();
+        EmployeeModel body = employeeService.getEmployeeById(employeeId);
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
+
+        return ResponseEntity.ok(responseBody);
     }
 }

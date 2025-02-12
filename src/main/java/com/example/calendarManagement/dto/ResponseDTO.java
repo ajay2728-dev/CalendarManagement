@@ -14,14 +14,6 @@ public class ResponseDTO {
         this.error = error;
     }
 
-    public static ResponseDTO successResponse(String message, int code, Object data){
-        return new ResponseDTO(message,code,data,null);
-    }
-
-    public static ResponseDTO errorResponse(String message, int code, Object error){
-        return new ResponseDTO(message,code,null,error);
-    }
-
     public String getMessage() {
         return message;
     }

@@ -37,4 +37,14 @@ public class GlobalExceptionHandler {
         ResponseDTO response = new ResponseDTO("Fail to add employee", 400, null, error);
         return ResponseEntity.badRequest().body(response);
     }
+
+    @ExceptionHandler(NotFoundEmployeeException.class)
+    public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundEmployeeException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+
+        ResponseDTO response = new ResponseDTO("Employee not found", 400, null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
+
 }

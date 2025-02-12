@@ -56,7 +56,7 @@ public class EmployeeService {
 
         // check employee is present
         if(!employeeOpt.isPresent()){
-            throw new NotFoundEmployeeException("Employee Not Found");
+            throw new NotFoundEmployeeException("No employee exists with the given ID");
         }
 
         EmployeeModel employee = employeeOpt.get();
