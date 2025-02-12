@@ -39,8 +39,8 @@ public class EmployeeService {
         EmployeeModel newEmployee = new EmployeeModel(
                 generateEmployeeId,
                 employee.getEmployeeName(),
-                employee.getEmployeeEmail(),
                 employee.getOfficeLocation(),
+                employee.getEmployeeEmail(),
                 employee.getActive(),
                 employee.getSalary(),
                 employee.getDepartment() );
