@@ -47,7 +47,7 @@ public class EmployeeService {
                 employee.getEmployeeName(),
                 employee.getOfficeLocation(),
                 employee.getEmployeeEmail(),
-                employee.getActive(),
+                employee.getIsActive(),
                 employee.getSalary(),
                 employee.getDepartment() );
 

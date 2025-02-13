@@ -162,7 +162,7 @@ public class EmployeeServiceTest {
 
        EmployeeModel result = employeeService.deleteEmployeeById(1);
 
-       assertThat(result.getActive()).isEqualTo(false);
+       assertThat(result.getIsActive()).isEqualTo(false);
        assertThat(result.getEmployeeId()).isEqualTo(1);
 
     }

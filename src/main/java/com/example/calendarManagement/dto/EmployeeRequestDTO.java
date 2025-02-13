@@ -5,16 +5,16 @@ public class EmployeeRequestDTO {
     private String employeeName;
     private String officeLocation;
     private String employeeEmail;
-    private Boolean active;
+    private Boolean isActive;
     private int salary;
     private String department;
 
-    public EmployeeRequestDTO(int employeeId,String employeeName, String officeLocation, String employeeEmail, Boolean active, int salary, String department) {
+    public EmployeeRequestDTO(int employeeId,String employeeName, String officeLocation, String employeeEmail, Boolean isActive, int salary, String department) {
 
         this.employeeName = employeeName;
         this.officeLocation = officeLocation;
         this.employeeEmail = employeeEmail;
-        this.active = active;
+        this.isActive = isActive;
         this.salary = salary;
         this.department = department;
     }
@@ -43,12 +43,12 @@ public class EmployeeRequestDTO {
         this.employeeEmail = employeeEmail;
     }
 
-    public Boolean getActive() {
-        return active;
+    public Boolean getIsActive() {
+        return isActive;
     }
 
-    public void setActive(Boolean active) {
-        this.active = active;
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
     }
 
     public int getSalary() {
