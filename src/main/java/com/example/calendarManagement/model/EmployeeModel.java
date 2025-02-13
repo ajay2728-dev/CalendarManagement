@@ -16,6 +16,28 @@ import javax.persistence.Id;
 @Entity
 public class EmployeeModel {
 
+    @Id
+    @Column(name = "employeeId")
+    int employeeId;
+
+    @Column(name = "employeeName")
+    String employeeName;
+
+    @Column(name = "employeeEmail")
+    String employeeEmail;
+
+    @Column(name =  "officeLocation")
+    String officeLocation;
+
+    @Column(name = "department")
+    String department;
+
+    @Column(name = "salary")
+    int salary;
+
+    @Column(name = "isActive")
+    Boolean isActive;
+
     public EmployeeModel(int employeeId, String employeeName, String officeLocation, String employeeEmail, Boolean isActive, int salary, String department) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
@@ -82,26 +104,5 @@ public class EmployeeModel {
         isActive = active;
     }
 
-    @Id
-    @Column(name = "employeeId")
-    int employeeId;
-
-    @Column(name = "employeeName")
-    String employeeName;
-
-    @Column(name = "employeeEmail")
-    String employeeEmail;
-
-    @Column(name =  "officeLocation")
-    String officeLocation;
-
-    @Column(name = "department")
-    String department;
-
-    @Column(name = "salary")
-    int salary;
-
-    @Column(name = "isActive")
-    Boolean isActive;
 
 }

@@ -10,7 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -52,8 +56,64 @@ public class EmployeeServiceIntegrationTest {
 
     }
 
-//    @Test
-//    void testGetAllEmployee
+    @Test
+    void testGetAllEmployee(){
+
+         ResponseDTO response = restTemplate.getForObject(baseUrl,ResponseDTO.class);
+
+         assertThat(response).isNotNull();
+         assertThat(response.getMessage()).isEqualTo("Employee retrieved successfully");
+         assertThat(response.getCode()).isEqualTo(200);
+         assertThat(response.getError()).isEqualTo(null);
+
+        Map<String, Object> data = (Map<String, Object>) response.getData();
+        assertThat(data).isNotNull();
+
+        List<?> employees = (List<?>) data.get("body");
+        assertThat(employees).isNotNull();
+        assertThat(employees.size()).isNotEqualTo(0);
+    }
+
+    @Test
+    void testGetEmployeeById(){
+        String url = baseUrl + "/" + 1;
+        ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).isEqualTo("Employee retrieved successfully");
+        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getError()).isEqualTo(null);
+
+        Map<String, Object> getData = (Map<String, Object>) response.getData();
+        assertThat(getData).isNotNull();
+
+        Map<String, Object> retrievedEmployee = (Map<String, Object>) getData.get("employee");
+        assertThat(retrievedEmployee).isNotNull();
+        assertThat(retrievedEmployee.get("employeeId")).isEqualTo(1);
+
+    }
+
+    @Test
+    void testDeleteEmployeeById(){
+
+        String url = baseUrl + "/" + 1;
+        inputEmployee.setIsActive(false);
+        restTemplate.put(url,inputEmployee);
+
+        ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getError()).isEqualTo(null);
+
+        Map<String, Object> getData = (Map<String, Object>) response.getData();
+        assertThat(getData).isNotNull();
+
+        Map<String, Object> retrievedEmployee = (Map<String, Object>) getData.get("employee");
+        assertThat(retrievedEmployee).isNotNull();
+        assertThat(retrievedEmployee.get("isActive")).isEqualTo(false);
+
+    }
 
 }
 
