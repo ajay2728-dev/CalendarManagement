@@ -78,7 +78,7 @@ public class EmployeeService {
                 employee.getDepartment() );
     }
 
-    // method to get all empployee
+    // method to get all employee
     public List<EmployeeModel> getAllEmployee() {
         return employeeRepo.findAll();
     }

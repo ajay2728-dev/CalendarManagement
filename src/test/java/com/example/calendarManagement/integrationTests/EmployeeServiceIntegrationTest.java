@@ -57,7 +57,6 @@ public class EmployeeServiceIntegrationTest {
 
     @Test
     void testGetAllEmployee(){
-        restTemplate.postForObject(baseUrl,inputEmployee,ResponseDTO.class);
 
          ResponseDTO response = restTemplate.getForObject(baseUrl,ResponseDTO.class);
 
