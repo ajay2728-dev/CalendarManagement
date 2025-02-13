@@ -7,6 +7,10 @@ public class ResponseDTO {
     private Object data;
     private Object error;
 
+    public ResponseDTO(){
+
+    }
+
     public ResponseDTO(String message, int code, Object data, Object error) {
         this.message = message;
         this.code = code;

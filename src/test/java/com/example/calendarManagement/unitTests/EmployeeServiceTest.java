@@ -1,4 +1,4 @@
-package com.example.calendarManagement;
+package com.example.calendarManagement.unitTests;
 
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.exception.InvalidFieldException;

@@ -7,6 +7,8 @@ import com.example.calendarManagement.exception.NonUniqueFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.repository.EmployeeRepo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 @Service
 public class EmployeeService {
 
+    private static final Logger log = LoggerFactory.getLogger(EmployeeService.class);
     @Autowired
     private EmployeeRepo employeeRepo;
 

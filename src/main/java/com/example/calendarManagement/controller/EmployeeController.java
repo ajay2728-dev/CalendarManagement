@@ -15,53 +15,53 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api/employee")
 public class EmployeeController {
     private static final Logger log = LoggerFactory.getLogger(EmployeeController.class);
     @Autowired
     EmployeeService employeeService;
 
-    @PostMapping("/api/employee")
+    @PostMapping
     public ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO){
-        log.info("add employee controller..... ");
+        log.info("add employee... ");
 
-        Map<String, Object> data = new HashMap<>();
         EmployeeModel body = employeeService.addEmployee(employeeRequestDTO);
+        Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Employee added successfully",201,data,null);
 
         return ResponseEntity.ok(responseBody);
     }
 
-    @GetMapping("/api/employee")
+    @GetMapping
     public ResponseEntity<ResponseDTO> getAllEmployee(){
         log.info("getting all employee info");
 
-        Map<String, Object> data = new HashMap<>();
         List<EmployeeModel> body = employeeService.getAllEmployee();
+        Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
 
         return ResponseEntity.ok(responseBody);
     }
 
-    @GetMapping("/api/employee/{employeeId}")
+    @GetMapping("/{employeeId}")
     public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable int employeeId){
-        log.info("getting employee with Id ");
 
-        Map<String, Object> data = new HashMap<>();
         EmployeeModel body = employeeService.getEmployeeById(employeeId);
+        Map<String, Object> data = new HashMap<>();
         data.put("employee",body);
         ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
 
         return ResponseEntity.ok(responseBody);
     }
 
-    @PutMapping("/api/employee/{employeeId}")
+    @PutMapping("/{employeeId}")
     public ResponseEntity<ResponseDTO> deleteEmployeeById(@PathVariable int employeeId) throws Exception {
         log.info("delete employee by Id");
 
-        Map<String, Integer> data = new HashMap<>();
         EmployeeModel body = employeeService.deleteEmployeeById(employeeId);
+        Map<String, Integer> data = new HashMap<>();
         data.put("employeeId",body.getEmployeeId());
         ResponseDTO responseBody = new ResponseDTO("Employee deleted successfully",200,data,null);
 
