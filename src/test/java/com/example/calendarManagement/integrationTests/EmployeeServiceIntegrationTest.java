@@ -12,6 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -52,8 +55,24 @@ public class EmployeeServiceIntegrationTest {
 
     }
 
-//    @Test
-//    void testGetAllEmployee
+    @Test
+    void testGetAllEmployee(){
+        restTemplate.postForObject(baseUrl,inputEmployee,ResponseDTO.class);
+
+         ResponseDTO response = restTemplate.getForObject(baseUrl,ResponseDTO.class);
+
+         assertThat(response).isNotNull();
+         assertThat(response.getMessage()).isEqualTo("Employee retrieved successfully");
+         assertThat(response.getCode()).isEqualTo(200);
+         assertThat(response.getError()).isEqualTo(null);
+
+        Map<String, Object> data = (Map<String, Object>) response.getData();
+        assertThat(data).isNotNull();
+
+        List<?> employees = (List<?>) data.get("body");
+        assertThat(employees).isNotNull();
+        assertThat(employees.size()).isNotEqualTo(0);
+    }
 
 }
 
