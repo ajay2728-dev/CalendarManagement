@@ -18,22 +18,22 @@ public class EmployeeModel {
 
     @Id
     @Column(name = "employeeId")
-    int employeeId;
+    private int employeeId;
 
     @Column(name = "employeeName")
-    String employeeName;
+    private String employeeName;
 
     @Column(name = "employeeEmail")
-    String employeeEmail;
+    private String employeeEmail;
 
     @Column(name =  "officeLocation")
-    String officeLocation;
+    private String officeLocation;
 
     @Column(name = "department")
-    String department;
+    private String department;
 
     @Column(name = "salary")
-    int salary;
+    private int salary;
 
     @Column(name = "isActive")
     Boolean isActive;
