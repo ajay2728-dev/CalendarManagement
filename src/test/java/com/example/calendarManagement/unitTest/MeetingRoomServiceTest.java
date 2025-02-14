@@ -4,7 +4,6 @@ import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
-import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.model.MeetingRoomModel;
 import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.MeetingRoomRepo;
@@ -63,7 +62,7 @@ public class MeetingRoomServiceTest {
     }
 
     @Test
-    void test_whenAddMeetingRoom_givenMissingInput_ThrowMissingFieldException(){
+    void test_whenAddMeetingRoom_givenInvalidOfficeId_ThrowMissingFieldException(){
 
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
                     meetingRoomService.addMeetingRoom(missingInputMeetingRoom);
@@ -74,7 +73,7 @@ public class MeetingRoomServiceTest {
     }
 
     @Test
-    void test_whenAddMeetingRoom_inValidOfficeId_ThrowNotFoundException(){
+    void test_whenAddMeetingRoom_givenValidInput_ThrowNotFoundException(){
 
         Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
@@ -85,12 +84,46 @@ public class MeetingRoomServiceTest {
 
     @Test
     void test_whenAddMeetingRoom_WhenRoomLimitExceeded_ThrowConstraintViolationException(){
-        Mockito.when(officeRepo.findById(1)).thenReturn(Optional.of(office));
+        Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(office));
         Mockito.when(meetingRoomRepo.countByOffice(office)).thenReturn(10);
 
         ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class,()->{
             meetingRoomService.addMeetingRoom(inputMeetingRoom);
         });
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatus_givenValidInput_updateStatusSuccess(){
+
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
+        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(new MeetingRoomModel(1, "Alpha Conference", office, false));
+
+        MeetingRoomModel result = meetingRoomService.updateStatusMeetingRoom(new MeetingRoomRequestDTO(1, "Alpha Conference", 1, true));
+
+        assertThat(result).isNotNull();
+        assertThat(result.getiIsEnable()).isEqualTo(false);
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatus_givenMissingInput_ThrowMissingFieldException(){
+
+        MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
+                    meetingRoomService.updateStatusMeetingRoom(missingInputMeetingRoom);
+                }
+        );
+        assertEquals("Missing Required Input",thrownException.getMessage());
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatus_inValidRoomId_ThrowNotFoundException(){
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
+            meetingRoomService.updateStatusMeetingRoom(new MeetingRoomRequestDTO(1, "Alpha Conference", 1, true));
+        });
+
+        assertEquals("Room Not Found",thrownException.getMessage());
+
     }
 
 }

@@ -54,7 +54,7 @@ public class MeetingRoomModel {
         this.office = office;
     }
 
-    public boolean isEnable() {
+    public boolean getiIsEnable() {
         return isEnable;
     }
 

@@ -40,7 +40,7 @@ public class EmployeeServiceIntegrationTest {
         baseUrl = "http://localhost:" + port + "/api/employee";
 
         inputEmployee=new EmployeeRequestDTO(0, "John Doe", "New York",
-                "john.doe@xyz.com", true, 50000, "Engineering");
+                "john121.doe@xyz.com", true, 50000, "Engineering");
     }
 
     @Test

@@ -7,6 +7,13 @@ public class MeetingRoomRequestDTO {
     private Boolean isEnable;
 
     public MeetingRoomRequestDTO(int roomId, String roomName, int officeId, Boolean isEnable) {
+        this.roomId=roomId;
+        this.roomName = roomName;
+        this.officeId = officeId;
+        this.isEnable = (isEnable!=null) ? isEnable : true;
+    }
+
+    public MeetingRoomRequestDTO(String roomName, int officeId, Boolean isEnable) {
         this.roomName = roomName;
         this.officeId = officeId;
         this.isEnable = (isEnable!=null) ? isEnable : true;

@@ -42,7 +42,7 @@ public class MeetingRoomService {
             throw new ConstraintViolationException("Office Already have 10 meeting room");
         }
 
-        int newMeetingRoomId = countMeetingRoom+1;
+        int newMeetingRoomId = meetingRoomRepo.findAll().size()+1;
         MeetingRoomModel newMeetingRoom = new MeetingRoomModel( newMeetingRoomId,
                                                                 meetingRoom.getRoomName(),
                                                                 office.get(), meetingRoom.getEnable() );
@@ -50,5 +50,25 @@ public class MeetingRoomService {
         // add meetingRoom;
         MeetingRoomModel saveMeetingRoom = meetingRoomRepo.save(newMeetingRoom);
         return saveMeetingRoom;
+    }
+
+    public MeetingRoomModel updateStatusMeetingRoom(MeetingRoomRequestDTO meetingRoom) {
+        // check missing attribute
+        if(meetingRoom.getRoomId()==0 || meetingRoom.getEnable()==null){
+            throw new MissingFieldException("Missing Required Input");
+        }
+
+        //check valid room id
+        Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoom.getRoomId());
+        if(!exitingRoomOpt.isPresent()){
+            throw new NotFoundException("Room Not Found");
+        }
+
+        MeetingRoomModel exitingRoom = exitingRoomOpt.get();
+        exitingRoom.setEnable(meetingRoom.getEnable());
+
+        //update status of meeting room
+        MeetingRoomModel updateMeetingRoom = meetingRoomRepo.save(exitingRoom);
+        return updateMeetingRoom;
     }
 }
