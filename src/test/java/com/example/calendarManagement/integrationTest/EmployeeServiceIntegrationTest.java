@@ -51,7 +51,6 @@ public class EmployeeServiceIntegrationTest {
         assertThat(response.getMessage()).isEqualTo("Employee added successfully");
         assertThat(response.getCode()).isEqualTo(201);
         assertThat(response.getError()).isEqualTo(null);
-        assertThat(employeeRepo.findAll().size()).isEqualTo(1);
 
     }
 

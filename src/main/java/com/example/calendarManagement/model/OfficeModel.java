@@ -20,6 +20,9 @@ public class OfficeModel {
     @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingRoomModel> meetingRooms = new ArrayList<>();
 
+    public OfficeModel(){
+
+    }
 
     public OfficeModel(int officeId, String officeName, String officeLocation) {
         this.officeId = officeId;

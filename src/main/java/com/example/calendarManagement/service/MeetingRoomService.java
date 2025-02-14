@@ -24,6 +24,7 @@ public class MeetingRoomService {
 
     public MeetingRoomModel addMeetingRoom(MeetingRoomRequestDTO meetingRoom)  {
         // check missing input
+
         if(meetingRoom.getRoomName()==null || meetingRoom.getOffice_id()==0){
             throw new MissingFieldException("Missing Required Input");
         }

@@ -19,6 +19,10 @@ public class MeetingRoomModel {
     @Column(name = "isEnable")
     private boolean isEnable;
 
+    public MeetingRoomModel(){
+
+    }
+
     public MeetingRoomModel(int roomId, String roomName, OfficeModel office, boolean isEnable) {
         this.roomId = roomId;
         this.roomName = roomName;

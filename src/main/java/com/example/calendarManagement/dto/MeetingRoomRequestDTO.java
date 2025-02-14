@@ -3,15 +3,19 @@ package com.example.calendarManagement.dto;
 public class MeetingRoomRequestDTO {
     private int roomId;
     private String roomName;
-    private int office_id;
+    private int officeId;
     private Boolean isEnable;
 
-    public MeetingRoomRequestDTO(int roomId, String roomName, int office_id, Boolean isEnable) {
-        this.roomId = roomId;
+    public MeetingRoomRequestDTO(int roomId, String roomName, int officeId, Boolean isEnable) {
         this.roomName = roomName;
-        this.office_id = office_id;
+        this.officeId = officeId;
         this.isEnable = (isEnable!=null) ? isEnable : true;
     }
+
+    public MeetingRoomRequestDTO(){
+
+    }
+
 
     public Boolean getEnable() {
         return isEnable;
@@ -38,10 +42,10 @@ public class MeetingRoomRequestDTO {
     }
 
     public int getOffice_id() {
-        return office_id;
+        return officeId;
     }
 
-    public void setOffice_id(int office_id) {
-        this.office_id = office_id;
+    public void setOffice_id(int officeId) {
+        this.officeId = officeId;
     }
 }
