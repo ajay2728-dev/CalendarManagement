@@ -32,7 +32,19 @@ public class MeetingRoomController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/status")
+    @GetMapping("/{meetingRoomId}")
+    public ResponseEntity<ResponseDTO> getMeetingRoomId(@PathVariable int meetingRoomId ){
+        log.info("getting meeting room by id");
+
+        MeetingRoomModel body = meetingRoomService.getMeetingRoomId(meetingRoomId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO response = new ResponseDTO("Meeting room detail retrieved successfully",200,data,null);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PutMapping("/update-status")
     public ResponseEntity<ResponseDTO> updateStatusMeetingRoom(@RequestBody MeetingRoomRequestDTO meetingRoom){
         log.info("updating meeting room status");
 

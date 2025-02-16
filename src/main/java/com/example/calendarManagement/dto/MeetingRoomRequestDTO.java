@@ -1,16 +1,19 @@
 package com.example.calendarManagement.dto;
 
+import lombok.extern.slf4j.Slf4j;
+
+
 public class MeetingRoomRequestDTO {
     private int roomId;
     private String roomName;
     private int officeId;
-    private Boolean isEnable;
+    private boolean isEnable;
 
-    public MeetingRoomRequestDTO(int roomId, String roomName, int officeId, Boolean isEnable) {
+    public MeetingRoomRequestDTO(int roomId, String roomName, int officeId, boolean isEnable) {
         this.roomId=roomId;
         this.roomName = roomName;
         this.officeId = officeId;
-        this.isEnable = (isEnable!=null) ? isEnable : true;
+        this.isEnable = isEnable;
     }
 
     public MeetingRoomRequestDTO(String roomName, int officeId, Boolean isEnable) {
@@ -23,12 +26,11 @@ public class MeetingRoomRequestDTO {
 
     }
 
-
-    public Boolean getEnable() {
+    public boolean getEnable() {
         return isEnable;
     }
 
-    public void setEnable(Boolean enable) {
+    public void setEnable(boolean enable) {
         isEnable = enable;
     }
 

@@ -20,6 +20,7 @@ public class MeetingRoomServiceIntegrationTest {
 
     private MeetingRoomRequestDTO inputMeetingRoom;
     private MeetingRoomRequestDTO saveMeetingRoom;
+    private MeetingRoomRequestDTO updatedMeetingRoom;
     private static RestTemplate restTemplate;
     private String baseUrl;
 
@@ -33,6 +34,7 @@ public class MeetingRoomServiceIntegrationTest {
         baseUrl = "http://localhost:" + port + "/api/meetingroom";
         inputMeetingRoom = new MeetingRoomRequestDTO(0, "Alpha Conference", 1, true);
         saveMeetingRoom = new MeetingRoomRequestDTO(1,"Alpha Conference", 1, true);
+        updatedMeetingRoom = new MeetingRoomRequestDTO(1,"Alpha Conference", 1, false);
     }
 
     @Test
@@ -47,14 +49,17 @@ public class MeetingRoomServiceIntegrationTest {
 
     @Test
     void test_updateMeetingRoomStatus(){
-        String url = baseUrl + "/status";
+        String url = baseUrl + "/update-status";
+        inputMeetingRoom.setEnable(false);
+        restTemplate.put(url,updatedMeetingRoom);
 
-        ResponseDTO response = restTemplate.postForObject(url,saveMeetingRoom,ResponseDTO.class);
-
+        String getMeetingRoomByIdUrl = url+1;
+        ResponseDTO response = restTemplate.getForObject(getMeetingRoomByIdUrl,ResponseDTO.class);
         assertThat(response).isNotNull();
-        assertThat(response.getMessage()).isEqualTo("Meeting room status updated");
+        assertThat(response.getMessage()).isEqualTo("Meeting room detail retrieved successfully");
         assertThat(response.getCode()).isEqualTo(201);
         assertThat(response.getError()).isEqualTo(null);
+
     }
 
 }

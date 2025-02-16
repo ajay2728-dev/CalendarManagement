@@ -54,7 +54,7 @@ public class MeetingRoomService {
 
     public MeetingRoomModel updateStatusMeetingRoom(MeetingRoomRequestDTO meetingRoom) {
         // check missing attribute
-        if(meetingRoom.getRoomId()==0 || meetingRoom.getEnable()==null){
+        if(meetingRoom.getRoomId()==0){
             throw new MissingFieldException("Missing Required Input");
         }
 
@@ -70,5 +70,16 @@ public class MeetingRoomService {
         //update status of meeting room
         MeetingRoomModel updateMeetingRoom = meetingRoomRepo.save(exitingRoom);
         return updateMeetingRoom;
+    }
+
+    public MeetingRoomModel getMeetingRoomId(int meetingRoomId) {
+        // check valid meeting room
+        Optional<MeetingRoomModel> meetingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
+        if(!meetingRoomOpt.isPresent()){
+            throw new NotFoundException("Meeting room not found");
+        }
+
+        MeetingRoomModel exitingRoom = meetingRoomOpt.get();
+        return exitingRoom;
     }
 }
