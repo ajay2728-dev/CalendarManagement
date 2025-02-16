@@ -47,4 +47,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(ConstraintViolationException.class)
+    public  ResponseEntity<ResponseDTO> handleConstraintViolationException(ConstraintViolationException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+
+        ResponseDTO response = new ResponseDTO("Constrain Violated", 409, null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
+
 }
