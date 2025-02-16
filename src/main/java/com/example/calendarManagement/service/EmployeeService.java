@@ -6,7 +6,9 @@ import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NonUniqueFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
+import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.EmployeeRepo;
+import com.example.calendarManagement.repository.OfficeRepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +24,13 @@ public class EmployeeService {
     @Autowired
     private EmployeeRepo employeeRepo;
 
+    @Autowired
+    private OfficeRepo officeRepo;
+
     // method to add employee
     public EmployeeModel addEmployee(EmployeeRequestDTO employee) {
         // checking missing input field
-        if(employee.getEmployeeName()==null || employee.getEmployeeEmail()==null || employee.getDepartment()==null || employee.getOfficeLocation()==null || employee.getSalary()==0){
+        if(employee.getEmployeeName()==null || employee.getEmployeeEmail()==null || employee.getDepartment()==null || employee.getOfficeID()==0 || employee.getSalary()==0){
             throw new MissingFieldException("Missing Required Input");
         }
 
@@ -40,16 +45,19 @@ public class EmployeeService {
             throw new NonUniqueFieldException("Provide Different Employee Email");
         }
 
-        int generateEmployeeId=(int) (employeeRepo.count() + 1);
+        Optional<OfficeModel> officeOpt = officeRepo.findById(employee.getOfficeID());
+        if(!officeOpt.isPresent()){
+            throw new NotFoundException("Office not found");
+        }
 
         EmployeeModel newEmployee = new EmployeeModel(
-                generateEmployeeId,
                 employee.getEmployeeName(),
-                employee.getOfficeLocation(),
                 employee.getEmployeeEmail(),
-                employee.getIsActive(),
-                employee.getSalary(),
-                employee.getDepartment() );
+                officeOpt.get(),
+                employee.getDepartment(),
+                employee.getActive(),
+                employee.getSalary()
+                 );
 
         EmployeeModel saveEmployee = employeeRepo.save(newEmployee);
 
@@ -69,13 +77,7 @@ public class EmployeeService {
         EmployeeModel employee = employeeOpt.get();
 
         // return the employee
-        return new EmployeeModel(employee.getEmployeeId(),
-                employee.getEmployeeName(),
-                employee.getOfficeLocation(),
-                employee.getEmployeeEmail(),
-                employee.getActive(),
-                employee.getSalary(),
-                employee.getDepartment() );
+        return employee;
     }
 
     // method to get all employee

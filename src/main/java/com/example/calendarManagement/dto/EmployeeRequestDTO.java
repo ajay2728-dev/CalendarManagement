@@ -3,20 +3,28 @@ package com.example.calendarManagement.dto;
 public class EmployeeRequestDTO {
     private int employeeId;
     private String employeeName;
-    private String officeLocation;
+    private int officeId;
     private String employeeEmail;
     private Boolean isActive;
     private int salary;
     private String department;
 
-    public EmployeeRequestDTO(int employeeId,String employeeName, String officeLocation, String employeeEmail, Boolean isActive, int salary, String department) {
-
+    public EmployeeRequestDTO(int employeeId, String employeeName, int officeId, String employeeEmail, Boolean isActive, int salary, String department) {
+        this.employeeId = employeeId;
         this.employeeName = employeeName;
-        this.officeLocation = officeLocation;
+        this.officeId = officeId;
         this.employeeEmail = employeeEmail;
         this.isActive = isActive;
         this.salary = salary;
         this.department = department;
+    }
+
+    public int getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(int employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getEmployeeName() {
@@ -27,12 +35,12 @@ public class EmployeeRequestDTO {
         this.employeeName = employeeName;
     }
 
-    public String getOfficeLocation() {
-        return officeLocation;
+    public int getOfficeID() {
+        return officeId;
     }
 
-    public void setOfficeLocation(String officeLocation) {
-        this.officeLocation = officeLocation;
+    public void setOfficeID(int officeId) {
+        this.officeId = officeId;
     }
 
     public String getEmployeeEmail() {
@@ -43,12 +51,12 @@ public class EmployeeRequestDTO {
         this.employeeEmail = employeeEmail;
     }
 
-    public Boolean getIsActive() {
+    public Boolean getActive() {
         return isActive;
     }
 
-    public void setIsActive(Boolean isActive) {
-        this.isActive = isActive;
+    public void setActive(Boolean active) {
+        isActive = active;
     }
 
     public int getSalary() {

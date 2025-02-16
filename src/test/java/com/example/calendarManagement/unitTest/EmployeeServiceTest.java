@@ -6,6 +6,7 @@ import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NonUniqueFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
+import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.service.EmployeeService;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,7 @@ public class EmployeeServiceTest {
     private EmployeeRequestDTO inputEmployee;
     private EmployeeRequestDTO missingInputEmployee;
     private EmployeeRequestDTO invalidEmailEmployee;
+    private OfficeModel office;
     List<EmployeeModel> mockEmployees;
 
     @Mock
@@ -42,23 +44,25 @@ public class EmployeeServiceTest {
     @BeforeEach
     void setup(){
 
-        inputEmployee = new EmployeeRequestDTO(0, "John Doe", "New York",
+        office =  new OfficeModel(1,"Headquarters","New York");
+
+        inputEmployee = new EmployeeRequestDTO(0, "John Doe", 1,
                 "john.doe@xyz.com", true, 50000, "Engineering");
 
-        savedEmployee = new EmployeeModel(1, "John Doe", "New York",
-                "john.doe@xyz.com", true, 50000, "Engineering");
+        savedEmployee = new EmployeeModel( 1,"John Doe", "john.doe@xyz.com", office,"Engineering",
+                true, 50000 );
 
-        missingInputEmployee = new EmployeeRequestDTO(1, "John Doe", "New York",
+        missingInputEmployee = new EmployeeRequestDTO(1, "John Doe", 1,
                 null, true, 50000, "Engineering");
 
-        invalidEmailEmployee = new EmployeeRequestDTO(1, "John Doe", "New York",
+        invalidEmailEmployee = new EmployeeRequestDTO(1, "John Doe", 1,
                 "john.doe.com", true, 50000, "Engineering");
         
         mockEmployees = Arrays.asList(
-                new EmployeeModel(1, "John Doe", "New York",
-                        "john.doe@xyz.com", true, 50000, "Engineering"),
-                new EmployeeModel(1, "Ajay Singh", "Bangalore",
-                        "ajay.singh@xyz.com", true, 30000, "Engineering")
+                new EmployeeModel("John Doe", "john.doe@xyz.com", office,"Engineering",
+                        true, 50000),
+                new EmployeeModel("Ajay Singh", "ajay.singh@xyz.com",
+                        office, "Engineering", true, 30000)
         );
 
 
@@ -101,8 +105,8 @@ public class EmployeeServiceTest {
     @Test
     public void test_whenAddEmployee_givenNonUniqueEmployeeEmail_ThrowNonUniqueEmployeeEmailException() {
 
-        Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.of(new EmployeeModel(1, "John Doe", "john.doe@xyz.com",
-                "New York", true, 30000, "Engineering")));
+        Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
+                true, 50000)));
 
         NonUniqueFieldException thrownException = assertThrows(NonUniqueFieldException.class,()->{
                     employeeService.addEmployee(inputEmployee);
@@ -115,8 +119,8 @@ public class EmployeeServiceTest {
     @Test
     public void test_WhenGetEmployeeById_givenValidId_GetEmployeeSuccess()  {
 
-        Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1, "John Doe", "New York" ,
-                "john.doe@xyz.com", true, 50000, "Engineering")));
+        Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
+                true, 50000)));
 
         EmployeeModel result = employeeService.getEmployeeById(1);
 
@@ -154,11 +158,11 @@ public class EmployeeServiceTest {
     @Test
     public void test_WhenDeleteEmployee_givenValidId_DeleteEmployeeSuccess() throws Exception {
 
-       Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1, "John Doe", "New York" ,
-               "john.doe@xyz.com", true, 50000, "Engineering")));
+       Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
+               true, 50000)));
 
-       Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(new EmployeeModel(1, "John Doe", "New York" ,
-               "john.doe@xyz.com", false, 50000, "Engineering"));
+       Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
+               true, 50000));
 
        EmployeeModel result = employeeService.deleteEmployeeById(1);
 

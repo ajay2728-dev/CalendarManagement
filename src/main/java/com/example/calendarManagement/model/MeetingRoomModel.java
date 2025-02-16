@@ -1,6 +1,7 @@
 package com.example.calendarManagement.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class MeetingRoomModel {
@@ -18,6 +19,9 @@ public class MeetingRoomModel {
 
     @Column(name = "isEnable")
     private boolean isEnable;
+
+    @OneToMany(mappedBy = "meetingRoom", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MeetingModel> meetings;
 
     public MeetingRoomModel(){
 
