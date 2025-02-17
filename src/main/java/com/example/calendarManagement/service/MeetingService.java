@@ -29,16 +29,20 @@ public class MeetingService {
         }
     }
 
+
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
+
             boolean response = client.canScheduleMeeting(meetingServiceDTO);
             Map<String, Object> data = new HashMap<>();
             data.put("canSchedule",response);
             return data;
-        } catch ( RuntimeException | TException ex){
-            throw new RuntimeException(ex);
+        } catch (TException ex){
+            throw new TException(ex.getMessage());
         }
 
     }
+
+
 
 }

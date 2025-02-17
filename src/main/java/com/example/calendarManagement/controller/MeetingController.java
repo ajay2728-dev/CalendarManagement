@@ -26,6 +26,13 @@ public class MeetingController {
     @PostMapping("/schedule")
     public ResponseEntity<ResponseDTO> canScheduleMeeting(@RequestBody IMeetingServiceDTO meetingServiceDTO) throws TException {
         log.info("can schedule meeting");
+//        Object validationResult = meetingService.validateCanSchedule(meetingServiceDTO);
+//
+//
+//        if(validationResult.){
+//
+//        }
+
         Object body = meetingService.canScheduleMeeting(meetingServiceDTO);
 
         Map<String, Object> data = new HashMap<>();

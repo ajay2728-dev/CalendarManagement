@@ -1,6 +1,7 @@
 package com.example.calendarManagement.exception;
 
 import com.example.calendarManagement.dto.ResponseDTO;
+import org.apache.thrift.TException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -10,6 +11,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(TException.class)
+    public ResponseEntity<ResponseDTO> handleThriftServerException(TException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+
+        ResponseDTO response = new ResponseDTO("Error from Thrift server", 500, null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
 
     @ExceptionHandler(MissingFieldException.class)
     public ResponseEntity<ResponseDTO> handleEmployeeMissingInputException(MissingFieldException ex){
@@ -55,5 +65,7 @@ public class GlobalExceptionHandler {
         ResponseDTO response = new ResponseDTO("Constrain Violated Error", 409, null, error);
         return ResponseEntity.badRequest().body(response);
     }
+
+//    @ExceptionHandler(NullPointerException)
 
 }
