@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Invalid employee data provide", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Missing Input Request Data error", 400, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -25,7 +25,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Fail to add employee", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Invalid Request Data Error ", 400, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Fail to add employee", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Non Unique Data Added Error ", 400, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Employee not found", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Not Found Error", 400, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Constrain Violated", 409, null, error);
+        ResponseDTO response = new ResponseDTO("Constrain Violated Error", 409, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
