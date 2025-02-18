@@ -2,6 +2,7 @@ package com.example.calendarManagement.controller;
 
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.calendarManagement.service.MeetingService;
+import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
@@ -23,18 +24,16 @@ public class MeetingController {
     @Autowired
     MeetingService meetingService;
 
+    @Autowired
+    MeetingValidator meetingValidator;
+
     @PostMapping("/schedule")
     public ResponseEntity<ResponseDTO> canScheduleMeeting(@RequestBody IMeetingServiceDTO meetingServiceDTO) throws TException {
         log.info("can schedule meeting");
-//        Object validationResult = meetingService.validateCanSchedule(meetingServiceDTO);
-//
-//
-//        if(validationResult.){
-//
-//        }
+
+        meetingValidator.canScheduleValidator(meetingServiceDTO);
 
         Object body = meetingService.canScheduleMeeting(meetingServiceDTO);
-
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting can be scheduled",200,data,null);
