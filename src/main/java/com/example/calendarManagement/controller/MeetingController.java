@@ -37,4 +37,18 @@ public class MeetingController {
         ResponseDTO responseBody = new ResponseDTO("Meeting can be scheduled",200,data,null);
         return ResponseEntity.ok(responseBody);
     }
+
+    @PostMapping
+    public ResponseEntity<ResponseDTO> meetingSchedule(@RequestBody IMeetingServiceDTO meetingServiceDTO) throws TException {
+        log.info("scheduling the meeting ...");
+
+        Object body = meetingService.meetingSchedule(meetingServiceDTO);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Meeting scheduled successfully",200,data,null);
+        return ResponseEntity.ok(responseBody);
+
+    }
+
+
 }
