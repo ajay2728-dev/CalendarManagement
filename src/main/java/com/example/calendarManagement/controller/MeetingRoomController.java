@@ -27,7 +27,7 @@ public class MeetingRoomController {
 
         MeetingRoomModel body = meetingRoomService.addMeetingRoom(meetingRoom);
         Map<String, Object> data = new HashMap<>();
-        data.put("body",body.getRoomId());
+        data.put("roomId",body.getRoomId());
         ResponseDTO response = new ResponseDTO("Meeting room added successfully",201,data,null);
         return ResponseEntity.ok(response);
     }

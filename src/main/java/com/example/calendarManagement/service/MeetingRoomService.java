@@ -25,12 +25,12 @@ public class MeetingRoomService {
     public MeetingRoomModel addMeetingRoom(MeetingRoomRequestDTO meetingRoom)  {
         // check missing input
 
-        if(meetingRoom.getRoomName()==null || meetingRoom.getOffice_id()==0){
+        if(meetingRoom.getRoomName()==null || meetingRoom.getOfficeId()==0){
             throw new MissingFieldException("Missing Required Input");
         }
 
         // search valid office
-        Optional<OfficeModel> office = officeRepo.findById(meetingRoom.getOffice_id());
+        Optional<OfficeModel> office = officeRepo.findById(meetingRoom.getOfficeId());
         if(!office.isPresent()){
             throw new NotFoundException("provided office not found");
         }
@@ -45,7 +45,7 @@ public class MeetingRoomService {
         int newMeetingRoomId = meetingRoomRepo.findAll().size()+1;
         MeetingRoomModel newMeetingRoom = new MeetingRoomModel( newMeetingRoomId,
                                                                 meetingRoom.getRoomName(),
-                                                                office.get(), meetingRoom.getEnable() );
+                                                                office.get(), meetingRoom.isEnable() );
 
         // add meetingRoom;
         MeetingRoomModel saveMeetingRoom = meetingRoomRepo.save(newMeetingRoom);
@@ -65,7 +65,7 @@ public class MeetingRoomService {
         }
 
         MeetingRoomModel exitingRoom = exitingRoomOpt.get();
-        exitingRoom.setEnable(meetingRoom.getEnable());
+        exitingRoom.setEnable(meetingRoom.isEnable());
 
         //update status of meeting room
         MeetingRoomModel updateMeetingRoom = meetingRoomRepo.save(exitingRoom);
