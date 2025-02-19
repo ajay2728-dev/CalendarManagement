@@ -63,5 +63,16 @@ public class MeetingController {
         return ResponseEntity.ok(responseBody);
     }
 
+    @GetMapping("/{meetingId}")
+    public ResponseEntity<ResponseDTO> getMeetingById(@PathVariable int meetingId){
+        log.info("getting meeting information by meetingId");
+
+        Object body = meetingService.getMeetingById(meetingId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Meeting room detail retrieved successfully",200,data,null);
+        return ResponseEntity.ok(responseBody);
+    }
+
 
 }

@@ -2,6 +2,7 @@ package com.example.calendarManagement.integrationTest;
 
 
 import com.example.calendarManagement.dto.MeetingStatusDTO;
+import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.thriftMeeting.IMeetingServiceDTO;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,7 +51,17 @@ public class MeetingServiceIntegrationTest {
 
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-
-
     }
+
+    @Test
+    void testGettingMeetingById(){
+        String url = baseUrl + "/" + 1;
+        ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).isEqualTo("Meeting room detail retrieved successfully");
+        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getError()).isEqualTo(null);
+    }
+
 }

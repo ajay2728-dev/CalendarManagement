@@ -4,6 +4,7 @@ import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.*;
+import com.example.calendarManagement.repository.MeetingRepo;
 import com.example.calendarManagement.repository.MeetingStatusRepo;
 import com.example.calendarManagement.service.MeetingService;
 import com.example.calendarManagement.service.ThriftMeetingService;
@@ -42,6 +43,9 @@ public class MeetingServiceTest {
 
     @Mock
     private MeetingStatusRepo meetingStatusRepo;
+
+    @Mock
+    private MeetingRepo meetingRepo;
 
     @BeforeEach
     void setup(){
@@ -109,4 +113,25 @@ public class MeetingServiceTest {
 
     }
 
+    @Test
+    public void test_whenGettingMeetingById_whenGivenValidMeetingId_gettingMeetingSuccess(){
+        Mockito.when(meetingRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(meetingModel));
+
+        MeetingModel result = meetingService.getMeetingById(1);
+
+        assertThat(result).isNotNull();
+
+    }
+
+    @Test
+    public void test_whenGettingMeetingById_whenGivenInvalidMeetingId_ThrowNotFoundException(){
+        Mockito.when(meetingRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
+                    meetingService.getMeetingById(100);
+                }
+        );
+        assertEquals("meeting not found with given meetingId",thrownException.getMessage());
+
+    }
 }
