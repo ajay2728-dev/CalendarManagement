@@ -59,7 +59,7 @@ public class MeetingController {
         Object body = meetingService.updateStatusMeeting(meetingStatusDTO);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
-        ResponseDTO responseBody = new ResponseDTO("Meeting status updated successfully",200,data,null);
+        ResponseDTO responseBody = new ResponseDTO("Meeting status updated successfully",201,data,null);
         return ResponseEntity.ok(responseBody);
     }
 

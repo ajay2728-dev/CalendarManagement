@@ -80,7 +80,7 @@ public class MeetingServiceTest {
         Mockito.when(meetingStatusRepo.save(Mockito.any(MeetingStatusModel.class))).
                 thenReturn(updateMeetingStatusModel);
 
-        MeetingStatusDTO result = meetingService.updateSatusMeeting(meetingStatusDTO);
+        MeetingStatusDTO result = meetingService.updateStatusMeeting(meetingStatusDTO);
 
         assertThat(result).isNotNull();
         assertThat(result.isStatus()).isEqualTo(meetingStatusDTO.isStatus());
@@ -90,7 +90,7 @@ public class MeetingServiceTest {
     @Test
     public void test_whenUpdatingMeetingStatus_givenMissingInput_ThrowMissingInputException(){
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    meetingService.updateSatusMeeting(missingMeetingStatusDTO);
+                    meetingService.updateStatusMeeting(missingMeetingStatusDTO);
                 }
         );
         assertEquals("Input Field for update meeting status is missing",thrownException.getMessage());
@@ -102,7 +102,7 @@ public class MeetingServiceTest {
                 thenReturn(Optional.empty());
 
         NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-                    meetingService.updateSatusMeeting(meetingStatusDTO);
+                    meetingService.updateStatusMeeting(meetingStatusDTO);
                 }
         );
         assertEquals("meeting status not found with give employeeId and meetingId",thrownException.getMessage());

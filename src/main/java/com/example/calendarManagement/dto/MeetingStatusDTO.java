@@ -12,6 +12,10 @@ public class MeetingStatusDTO {
         this.status = status;
     }
 
+    public MeetingStatusDTO() {
+
+    }
+
     public int getMeetingId() {
         return meetingId;
     }
