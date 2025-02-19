@@ -56,7 +56,7 @@ public class MeetingController {
     public ResponseEntity<ResponseDTO> updateStatusMeeting(@RequestBody MeetingStatusDTO meetingStatusDTO){
         log.info("updating meeting status of a employee");
 
-        Object body = meetingService.updateSatusMeeting(meetingStatusDTO);
+        Object body = meetingService.updateStatusMeeting(meetingStatusDTO);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting status updated successfully",200,data,null);

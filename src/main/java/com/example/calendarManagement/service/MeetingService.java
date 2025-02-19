@@ -17,7 +17,7 @@ public class MeetingService {
     @Autowired
     private MeetingStatusRepo meetingStatusRepo;
 
-    public MeetingStatusDTO updateSatusMeeting(MeetingStatusDTO meetingStatusDTO) {
+    public MeetingStatusDTO updateStatusMeeting(MeetingStatusDTO meetingStatusDTO) {
 
         // validation check
         if(meetingStatusDTO.getMeetingId()==0 || meetingStatusDTO.getEmployeeId()==0 || meetingStatusDTO.isStatus()==null){

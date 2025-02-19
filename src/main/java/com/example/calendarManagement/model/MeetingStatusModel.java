@@ -33,6 +33,10 @@ public class MeetingStatusModel {
         this.employees = employees;
     }
 
+    public MeetingStatusModel(){
+
+    }
+
     public int getStatusId() {
         return statusId;
     }
