@@ -1,17 +1,16 @@
 package com.example.calendarManagement.controller;
 
+import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.calendarManagement.service.MeetingService;
+import com.example.calendarManagement.service.ThriftMeetingService;
 import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,6 +19,9 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/meeting")
 public class MeetingController {
+
+    @Autowired
+    ThriftMeetingService thriftMeetingService;
 
     @Autowired
     MeetingService meetingService;
@@ -31,7 +33,7 @@ public class MeetingController {
     public ResponseEntity<ResponseDTO> canScheduleMeeting(@RequestBody IMeetingServiceDTO meetingServiceDTO) throws TException {
         log.info("can schedule meeting");
 
-        Object body = meetingService.canScheduleMeeting(meetingServiceDTO);
+        Object body = thriftMeetingService.canScheduleMeeting(meetingServiceDTO);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting can be scheduled",200,data,null);
@@ -42,12 +44,23 @@ public class MeetingController {
     public ResponseEntity<ResponseDTO> meetingSchedule(@RequestBody IMeetingServiceDTO meetingServiceDTO) throws TException {
         log.info("scheduling the meeting ...");
 
-        Object body = meetingService.meetingSchedule(meetingServiceDTO);
+        Object body = thriftMeetingService.meetingSchedule(meetingServiceDTO);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting scheduled successfully",200,data,null);
         return ResponseEntity.ok(responseBody);
 
+    }
+
+    @PutMapping("/update-status")
+    public ResponseEntity<ResponseDTO> updateStatusMeeting(@RequestBody MeetingStatusDTO meetingStatusDTO){
+        log.info("updating meeting status of a employee");
+
+        Object body = meetingService.updateSatusMeeting(meetingStatusDTO);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Meeting status updated successfully",200,data,null);
+        return ResponseEntity.ok(responseBody);
     }
 
 

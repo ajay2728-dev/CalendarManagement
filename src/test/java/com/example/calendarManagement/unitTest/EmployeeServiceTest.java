@@ -74,7 +74,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.empty());
         Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
 
-        EmployeeModel result= employeeService.addEmployee(inputEmployee);
+        EmployeeModel result = employeeService.addEmployee(inputEmployee);
 
         assertThat(result).isNotNull();
         assertThat(result.getEmployeeId()).isEqualTo(1);
