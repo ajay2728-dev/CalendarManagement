@@ -53,13 +53,24 @@ public class MeetingRoomServiceIntegrationTest {
         inputMeetingRoom.setEnable(false);
         restTemplate.put(url,updatedMeetingRoom);
 
-        String getMeetingRoomByIdUrl = url+1;
+        String getMeetingRoomByIdUrl = baseUrl+"/"+1;
         ResponseDTO response = restTemplate.getForObject(getMeetingRoomByIdUrl,ResponseDTO.class);
         assertThat(response).isNotNull();
         assertThat(response.getMessage()).isEqualTo("Meeting room detail retrieved successfully");
-        assertThat(response.getCode()).isEqualTo(201);
+        assertThat(response.getCode()).isEqualTo(200);
         assertThat(response.getError()).isEqualTo(null);
 
+    }
+
+    @Test
+    void test_gettingMeetingRoomById(){
+        String url = baseUrl+"/"+1;
+
+        ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).isEqualTo("Meeting room detail retrieved successfully");
+        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getError()).isEqualTo(null);
     }
 
 }
