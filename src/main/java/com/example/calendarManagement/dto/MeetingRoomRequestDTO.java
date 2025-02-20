@@ -1,5 +1,6 @@
 package com.example.calendarManagement.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -7,6 +8,7 @@ public class MeetingRoomRequestDTO {
     private int roomId;
     private String roomName;
     private int officeId;
+    @JsonProperty("isEnable")
     private boolean isEnable;
 
     public MeetingRoomRequestDTO(int roomId, String roomName, int officeId, boolean isEnable) {
@@ -26,12 +28,12 @@ public class MeetingRoomRequestDTO {
 
     }
 
-    public boolean getEnable() {
+    public boolean isEnable() {
         return isEnable;
     }
 
     public void setEnable(boolean enable) {
-        isEnable = enable;
+        this.isEnable = enable;
     }
 
     public int getRoomId() {
@@ -50,11 +52,11 @@ public class MeetingRoomRequestDTO {
         this.roomName = roomName;
     }
 
-    public int getOffice_id() {
+    public int getOfficeId() {
         return officeId;
     }
 
-    public void setOffice_id(int officeId) {
+    public void setOfficeId(int officeId) {
         this.officeId = officeId;
     }
 }

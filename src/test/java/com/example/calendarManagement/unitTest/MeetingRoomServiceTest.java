@@ -126,4 +126,28 @@ public class MeetingRoomServiceTest {
 
     }
 
+    @Test
+    void test_whenGettingRoomById_giveValidRoomId_getRoomSuccess(){
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
+
+        MeetingRoomModel result = meetingRoomService.getMeetingRoomId(1);
+
+        assertThat(result).isNotNull();
+        assertThat(result.getRoomId()).isEqualTo(1);
+    }
+
+    @Test
+    void test_whenGettingRoomById_givenInValidRoomId_ThrowNotFoundException(){
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
+            meetingRoomService.getMeetingRoomId(100);
+        });
+
+        assertEquals("Meeting room not found",thrownException.getMessage());
+
+    }
+
+
+
 }
