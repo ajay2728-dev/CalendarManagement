@@ -3,10 +3,11 @@ package com.example.calendarManagement.service;
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
-import com.example.calendarManagement.exception.NonUniqueFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.model.OfficeModel;
+import com.example.calendarManagement.objectMapper.EmployeeMapper;
+import com.example.calendarManagement.objectMapper.EmployeeModelToEmployeeRequestDTO;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.repository.OfficeRepo;
 import org.slf4j.Logger;
@@ -39,12 +40,6 @@ public class EmployeeService {
             throw new InvalidFieldException("Invalid Email Format");
         }
 
-        // check unique email
-        String emp_email=employee.getEmployeeEmail();
-        if(employeeRepo.findByEmployeeEmail(emp_email).isPresent()){
-            throw new NonUniqueFieldException("Provide Different Employee Email");
-        }
-
         Optional<OfficeModel> officeOpt = officeRepo.findById(employee.getOfficeID());
         if(!officeOpt.isPresent()){
             throw new NotFoundException("Office not found");
@@ -65,24 +60,26 @@ public class EmployeeService {
     }
 
     // method to get employee by id
-    public EmployeeModel getEmployeeById(int employeeId) {
+    public EmployeeRequestDTO getEmployeeById(int employeeId) {
         // search employee by id
         Optional<EmployeeModel> employeeOpt = employeeRepo.findById(employeeId);
 
         // check employee is present
-        if(!employeeOpt.isPresent()){
+        if(!employeeOpt.isPresent() || !employeeOpt.get().getIsActive()){
             throw new NotFoundException("No employee exists with the given ID");
         }
 
         EmployeeModel employee = employeeOpt.get();
+        EmployeeRequestDTO response = EmployeeModelToEmployeeRequestDTO.map(employee);
 
         // return the employee
-        return employee;
+        return response;
     }
 
     // method to get all employee
-    public List<EmployeeModel> getAllEmployee() {
-        return employeeRepo.findAll();
+    public List<EmployeeRequestDTO> getAllEmployee() {
+        List<EmployeeModel> activeEmployees = employeeRepo.findAllValidEmployee();
+        return EmployeeMapper.mapToDTOList(activeEmployees);
     }
 
     // method to delete employee by id

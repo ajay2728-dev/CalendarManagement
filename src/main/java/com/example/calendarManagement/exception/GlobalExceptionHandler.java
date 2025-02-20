@@ -1,22 +1,26 @@
 package com.example.calendarManagement.exception;
 
 import com.example.calendarManagement.dto.ResponseDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+
 import java.util.HashMap;
 import java.util.Map;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TException.class)
     public ResponseEntity<ResponseDTO> handleThriftServerException(TException ex){
+
+        log.error("Thrift Exception Caught: ", ex);
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
-
         ResponseDTO response = new ResponseDTO("Error from Thrift server", 500, null, error);
         return ResponseEntity.badRequest().body(response);
     }
@@ -39,14 +43,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-    @ExceptionHandler(NonUniqueFieldException.class)
-    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueFieldException ex){
-        Map<String, Object> error = new HashMap<>();
-        error.put("detail", ex.getMessage());
-
-        ResponseDTO response = new ResponseDTO("Non Unique Data Added Error ", 400, null, error);
-        return ResponseEntity.badRequest().body(response);
-    }
+//    @ExceptionHandler(NonUniqueFieldException.class)
+//    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueFieldException ex){
+//        Map<String, Object> error = new HashMap<>();
+//        error.put("detail", ex.getMessage());
+//
+//        ResponseDTO response = new ResponseDTO("Non Unique Data Added Error ", 400, null, error);
+//        return ResponseEntity.badRequest().body(response);
+//    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundException ex){

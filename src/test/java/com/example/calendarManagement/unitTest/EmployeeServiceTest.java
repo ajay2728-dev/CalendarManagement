@@ -3,7 +3,6 @@ package com.example.calendarManagement.unitTest;
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
-import com.example.calendarManagement.exception.NonUniqueFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.model.OfficeModel;
@@ -102,19 +101,6 @@ public class EmployeeServiceTest {
 
     }
 
-    @Test
-    public void test_whenAddEmployee_givenNonUniqueEmployeeEmail_ThrowNonUniqueEmployeeEmailException() {
-
-        Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
-                true, 50000)));
-
-        NonUniqueFieldException thrownException = assertThrows(NonUniqueFieldException.class,()->{
-                    employeeService.addEmployee(inputEmployee);
-                }
-        );
-        assertEquals("Provide Different Employee Email",thrownException.getMessage());
-
-    }
 
     @Test
     public void test_WhenGetEmployeeById_givenValidId_GetEmployeeSuccess()  {
@@ -122,7 +108,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
                 true, 50000)));
 
-        EmployeeModel result = employeeService.getEmployeeById(1);
+        EmployeeRequestDTO result = employeeService.getEmployeeById(1);
 
         assertThat(result).isNotNull();
         assertThat(result.getEmployeeId()).isEqualTo(1);
@@ -146,7 +132,7 @@ public class EmployeeServiceTest {
     public void test_WhenGetAllEmployee_RetrievedSuccess(){
         Mockito.when(employeeRepo.findAll()).thenReturn(mockEmployees);
 
-        List<EmployeeModel> result = employeeService.getAllEmployee();
+        List<EmployeeRequestDTO> result = employeeService.getAllEmployee();
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);

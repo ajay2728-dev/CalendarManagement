@@ -23,7 +23,7 @@ public class EmployeeModel {
     @Column(name = "employeeName")
     private String employeeName;
 
-    @Column(name = "employeeEmail")
+    @Column(name = "employeeEmail", unique = true)
     private String employeeEmail;
 
     @ManyToOne

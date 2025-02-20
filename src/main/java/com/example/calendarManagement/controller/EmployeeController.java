@@ -37,7 +37,7 @@ public class EmployeeController {
     public ResponseEntity<ResponseDTO> getAllEmployee(){
         log.info("getting all employee info");
 
-        List<EmployeeModel> body = employeeService.getAllEmployee();
+        List<EmployeeRequestDTO> body = employeeService.getAllEmployee();
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
@@ -48,7 +48,7 @@ public class EmployeeController {
     @GetMapping("/{employeeId}")
     public ResponseEntity<ResponseDTO> getEmployeeById(@PathVariable int employeeId){
 
-        EmployeeModel body = employeeService.getEmployeeById(employeeId);
+        EmployeeRequestDTO body = employeeService.getEmployeeById(employeeId);
         Map<String, Object> data = new HashMap<>();
         data.put("employee",body);
         ResponseDTO responseBody = new ResponseDTO("Employee retrieved successfully",200,data,null);
