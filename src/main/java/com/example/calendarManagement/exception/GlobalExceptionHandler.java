@@ -18,10 +18,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(TException.class)
     public ResponseEntity<ResponseDTO> handleThriftServerException(TException ex){
 
-        log.error("Thrift Exception Caught: ", ex);
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
         ResponseDTO response = new ResponseDTO("Error from Thrift server", 500, null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(ThriftServerException.class)
+    public ResponseEntity<ResponseDTO> handleThriftException( ThriftServerException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+        ResponseDTO response = new ResponseDTO("Error from Thrift server", ex.getStatus(), null, error);
         return ResponseEntity.badRequest().body(response);
     }
 

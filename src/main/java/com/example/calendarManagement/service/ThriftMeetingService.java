@@ -1,9 +1,11 @@
 package com.example.calendarManagement.service;
 
 import com.example.calendarManagement.dto.MeetingStatusDTO;
+import com.example.calendarManagement.exception.ThriftServerException;
 import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
+import com.example.thriftMeeting.IMeetingServiceResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -39,9 +41,14 @@ public class ThriftMeetingService {
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             meetingValidator.canScheduleValidator(meetingServiceDTO);
-            boolean response = client.canScheduleMeeting(meetingServiceDTO);
+            IMeetingServiceResponse response = client.canScheduleMeeting(meetingServiceDTO);
+
+            if(response.getCode()!=200){
+                throw new ThriftServerException(response.getMessage(),response.getCode());
+            }
+
             Map<String, Object> data = new HashMap<>();
-            data.put("canSchedule",response);
+            data.put("canSchedule",true);
             return data;
         } catch (TException ex){
             throw new TException(ex.getMessage());
@@ -53,8 +60,13 @@ public class ThriftMeetingService {
     public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             meetingValidator.meetingScheduleValidator(meetingServiceDTO);
-            IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
-            return response;
+            IMeetingServiceResponse response = client.meetingSchedule(meetingServiceDTO);
+
+            if(response.getCode()!=200){
+                throw new ThriftServerException(response.getMessage(),response.getCode());
+            }
+
+            return response.getData();
 
         } catch (TException ex){
             throw new TException(ex.getMessage());
