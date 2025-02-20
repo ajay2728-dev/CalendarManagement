@@ -50,7 +50,7 @@ public class ThriftMeetingService {
     }
 
 
-    public Object meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
+    public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             meetingValidator.meetingScheduleValidator(meetingServiceDTO);
             IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
