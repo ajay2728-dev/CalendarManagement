@@ -1,6 +1,7 @@
 package com.example.calendarManagement.service;
 
 
+import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -12,6 +13,7 @@ import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -66,5 +68,22 @@ public class MeetingService {
 
         // return the meeting
         return meeting;
+    }
+
+    @Transactional
+    public CancelMeetingResponseDTO cancelMeetingById(int meetingId) {
+        // check valid meeting id
+        Optional<MeetingModel> meetingModelOpt = meetingRepo.findValidMeeting(meetingId);
+        if(!meetingModelOpt.isPresent()){
+            throw new NotFoundException("Meeting not found with given id " + meetingId);
+        }
+
+        MeetingModel existingMeeting = meetingModelOpt.get();
+        meetingStatusRepo.updateMeetingStatusToFalse(meetingId);
+        existingMeeting.setValid(false);
+        meetingRepo.save(existingMeeting);
+
+        CancelMeetingResponseDTO response = new CancelMeetingResponseDTO(meetingId,false);
+        return response;
     }
 }

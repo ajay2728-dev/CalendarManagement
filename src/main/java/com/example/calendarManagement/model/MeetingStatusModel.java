@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "meeting_status_model")
 public class MeetingStatusModel {
 
     @Id

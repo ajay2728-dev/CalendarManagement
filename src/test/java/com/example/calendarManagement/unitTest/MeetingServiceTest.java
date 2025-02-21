@@ -1,5 +1,6 @@
 package com.example.calendarManagement.unitTest;
 
+import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -24,6 +25,7 @@ import java.util.Set;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 
 @ExtendWith(MockitoExtension.class)
 public class MeetingServiceTest {
@@ -132,6 +134,28 @@ public class MeetingServiceTest {
                 }
         );
         assertEquals("meeting not found with given meetingId",thrownException.getMessage());
+
+    }
+
+    @Test
+    public void test_whenCancelMeetingById_whenGivenValidMeetingId_deleteMeetingSuccess(){
+        Mockito.when(meetingRepo.findValidMeeting(Mockito.anyInt())).thenReturn(Optional.of(meetingModel));
+        doNothing().when(meetingStatusRepo).updateMeetingStatusToFalse(Mockito.anyInt());
+        meetingModel.setValid(false);
+        Mockito.when(meetingRepo.save(meetingModel)).thenReturn(meetingModel);
+        CancelMeetingResponseDTO response = meetingService.cancelMeetingById(1);
+
+        assertThat(response).isNotNull();
+    }
+
+    @Test
+    public void test_whenCancelMeetingById_whenGivenInvalidMeetingId_ThrowNotFoundException(){
+        Mockito.when(meetingRepo.findValidMeeting(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
+                    meetingService.cancelMeetingById(100);
+                }
+        );
+        assertEquals("Meeting not found with given id "+ 100,thrownException.getMessage());
 
     }
 }

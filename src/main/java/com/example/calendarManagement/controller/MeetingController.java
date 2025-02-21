@@ -1,5 +1,6 @@
 package com.example.calendarManagement.controller;
 
+import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingRequestDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
@@ -79,6 +80,18 @@ public class MeetingController {
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting room detail retrieved successfully",200,data,null);
         return ResponseEntity.ok(responseBody);
+    }
+
+    @PutMapping("/{meetingId}")
+    public ResponseEntity<ResponseDTO> cancelMeetingById(@PathVariable int meetingId){
+        log.info("deleting the meeting by id");
+
+        CancelMeetingResponseDTO body = meetingService.cancelMeetingById(meetingId);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Meeting canceled successfully",200,data,null);
+        return ResponseEntity.ok(responseBody);
+
     }
 
 
