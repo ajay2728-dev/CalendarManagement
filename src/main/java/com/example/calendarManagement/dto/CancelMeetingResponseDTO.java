@@ -9,6 +9,9 @@ public class CancelMeetingResponseDTO {
         this.status = status;
     }
 
+    public CancelMeetingResponseDTO() {
+    }
+
     public int getMeetingId() {
         return meetingId;
     }

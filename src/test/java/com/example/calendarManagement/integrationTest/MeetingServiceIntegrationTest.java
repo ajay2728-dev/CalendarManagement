@@ -1,6 +1,7 @@
 package com.example.calendarManagement.integrationTest;
 
 
+import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.thriftMeeting.IMeetingServiceDTO;
@@ -14,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -62,6 +64,21 @@ public class MeetingServiceIntegrationTest {
         assertThat(response.getMessage()).isEqualTo("Meeting room detail retrieved successfully");
         assertThat(response.getCode()).isEqualTo(200);
         assertThat(response.getError()).isEqualTo(null);
+    }
+
+    @Test
+    void testCancelMeetingById(){
+
+        String url = baseUrl + "/" + 9;
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<CancelMeetingResponseDTO> response = restTemplate.exchange(
+                url, HttpMethod.PUT, requestEntity, CancelMeetingResponseDTO.class);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+
     }
 
 }
