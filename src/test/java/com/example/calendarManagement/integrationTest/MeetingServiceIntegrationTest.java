@@ -81,4 +81,17 @@ public class MeetingServiceIntegrationTest {
 
     }
 
+    @Test
+    void testGettingEmployeeMeeting(){
+        String url = baseUrl + "/employee/" + 1 + "?filterType=today";
+        ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);
+
+        assertThat(response).isNotNull();
+        assertThat(response.getMessage()).isEqualTo("Meetings retrieved successfully");
+        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getError()).isEqualTo(null);
+
+
+    }
+
 }
