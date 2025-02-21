@@ -1,9 +1,6 @@
 package com.example.calendarManagement.unitTest;
 
-import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
-import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
-import com.example.calendarManagement.dto.EmployeeRequestDTO;
-import com.example.calendarManagement.dto.MeetingStatusDTO;
+import com.example.calendarManagement.dto.*;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.*;
@@ -140,7 +137,7 @@ public class MeetingServiceTest {
     public void test_whenGettingMeetingById_whenGivenValidMeetingId_gettingMeetingSuccess(){
         Mockito.when(meetingRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(meetingModel));
 
-        MeetingModel result = meetingService.getMeetingById(1);
+        MeetingResponseDTO result = meetingService.getMeetingById(1);
 
         assertThat(result).isNotNull();
 

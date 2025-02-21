@@ -3,6 +3,7 @@ package com.example.calendarManagement.service;
 
 import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
+import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
@@ -10,6 +11,7 @@ import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.MeetingModel;
 import com.example.calendarManagement.model.MeetingStatusModel;
 import com.example.calendarManagement.objectMapper.ListMeetingModelToListEmployeeMeetingResponse;
+import com.example.calendarManagement.objectMapper.MeetingModelTOMeetingResponseDTO;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.repository.MeetingRepo;
 import com.example.calendarManagement.repository.MeetingStatusRepo;
@@ -65,7 +67,7 @@ public class MeetingService {
         return updatedMeetingStatus;
     }
 
-    public MeetingModel getMeetingById(int meetingId) {
+    public MeetingResponseDTO getMeetingById(int meetingId) {
         // check meeting is valid or not
         Optional<MeetingModel> meetingOpt = meetingRepo.findById(meetingId);
 
@@ -74,9 +76,10 @@ public class MeetingService {
         }
 
         MeetingModel meeting = meetingOpt.get();
+        MeetingResponseDTO response = MeetingModelTOMeetingResponseDTO.map(meeting);
 
         // return the meeting
-        return meeting;
+        return response;
     }
 
     @Transactional
