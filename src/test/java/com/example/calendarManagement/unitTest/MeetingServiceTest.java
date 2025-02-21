@@ -1,10 +1,13 @@
 package com.example.calendarManagement.unitTest;
 
 import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
+import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
+import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.*;
+import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.repository.MeetingRepo;
 import com.example.calendarManagement.repository.MeetingStatusRepo;
 import com.example.calendarManagement.service.MeetingService;
@@ -18,9 +21,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,6 +33,7 @@ public class MeetingServiceTest {
 
     Set<EmployeeModel> employees = new HashSet<>();
     private MeetingStatusModel savedMeetingStatusModel;
+    private List<MeetingModel> mockMeetings;
     private MeetingStatusModel updateMeetingStatusModel;
     private MeetingStatusDTO meetingStatusDTO;
     private MeetingStatusDTO missingMeetingStatusDTO;
@@ -48,6 +50,9 @@ public class MeetingServiceTest {
 
     @Mock
     private MeetingRepo meetingRepo;
+
+    @Mock
+    private EmployeeRepo employeeRepo;
 
     @BeforeEach
     void setup(){
@@ -74,6 +79,22 @@ public class MeetingServiceTest {
         updateMeetingStatusModel =  new MeetingStatusModel(1,meetingModel,false,employees);
         meetingStatusDTO = new MeetingStatusDTO(1,1,false);
         missingMeetingStatusDTO = new MeetingStatusDTO(0,1,null);
+
+        mockMeetings = Arrays.asList(new MeetingModel(1,
+                "on boarding meeting",
+                "check update of intern",
+                meetingRoom,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1),
+                true),
+
+                new MeetingModel(2,
+                "on boarding meeting",
+                "check update of intern",
+                meetingRoom,
+                LocalDateTime.now(),
+                LocalDateTime.now().plusHours(1),
+                true));
 
     }
 
@@ -158,4 +179,38 @@ public class MeetingServiceTest {
         assertEquals("Meeting not found with given id "+ 100,thrownException.getMessage());
 
     }
+    @Test
+    public void test_getEmployeeMeeting_whenGivenValidInput_getEmployeeMeetingSuccess(){
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(savedEmployee));
+        Mockito.when(meetingRepo.findByEmployeeIdAndDateRange(Mockito.anyInt(),Mockito.any(),Mockito.any())).
+                thenReturn(mockMeetings);
+
+        List<EmployeeMeetingResponseDTO> result = meetingService.getEmployeeMeeting(1,"today",null,null);
+        assertThat(result).isNotNull();
+    }
+
+    @Test
+    public void test_getEmployeeMeeting_whenGivenInvalidInput_ThrowNotFoundException(){
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
+                    meetingService.getEmployeeMeeting(100,"today",null,null);
+                }
+        );
+        assertEquals("Employee not found with given ID",thrownException.getMessage());
+    }
+
+    @Test
+    public void test_getEmployeeMeeting_whenGivenMissingInput_ThrowMissingInputException(){
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).
+                thenReturn(Optional.of(savedEmployee));
+
+        MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
+                    meetingService.getEmployeeMeeting(100,"custom_range",null,null);
+                }
+        );
+        assertEquals("startDate and endDate is not provided",thrownException.getMessage());
+
+    }
+
+
 }

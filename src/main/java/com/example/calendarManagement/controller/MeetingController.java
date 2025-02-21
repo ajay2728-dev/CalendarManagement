@@ -1,9 +1,6 @@
 package com.example.calendarManagement.controller;
 
-import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
-import com.example.calendarManagement.dto.MeetingRequestDTO;
-import com.example.calendarManagement.dto.MeetingStatusDTO;
-import com.example.calendarManagement.dto.ResponseDTO;
+import com.example.calendarManagement.dto.*;
 import com.example.calendarManagement.objectMapper.IMeetingToMeetingRequest;
 import com.example.calendarManagement.objectMapper.MeetingRequestToIMeetingDTO;
 import com.example.calendarManagement.service.MeetingService;
@@ -14,10 +11,13 @@ import com.example.thriftMeeting.IMeetingServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -92,6 +92,24 @@ public class MeetingController {
         ResponseDTO responseBody = new ResponseDTO("Meeting canceled successfully",200,data,null);
         return ResponseEntity.ok(responseBody);
 
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<ResponseDTO> getEmployeeRecords(
+            @PathVariable("employeeId") int employeeId,
+            @RequestParam(value = "filterType", defaultValue = "today") String filterType,
+            @RequestParam(value = "startDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam(value = "endDate", required = false)
+            @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+
+        log.info("getting all meeting of employee by filtering");
+
+        List<EmployeeMeetingResponseDTO> body = meetingService.getEmployeeMeeting(employeeId, filterType, startDate, endDate);
+        Map<String, Object> data = new HashMap<>();
+        data.put("body",body);
+        ResponseDTO responseBody = new ResponseDTO("Meetings retrieved successfully",200,data,null);
+        return ResponseEntity.ok(responseBody);
     }
 
 
