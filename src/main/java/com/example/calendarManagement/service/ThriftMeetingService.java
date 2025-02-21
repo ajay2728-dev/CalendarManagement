@@ -6,6 +6,7 @@ import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
 import com.example.thriftMeeting.IMeetingServiceResponse;
+import com.example.thriftMeeting.MeetingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -41,17 +42,12 @@ public class ThriftMeetingService {
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             meetingValidator.canScheduleValidator(meetingServiceDTO);
-            IMeetingServiceResponse response = client.canScheduleMeeting(meetingServiceDTO);
-
-            if(response.getCode()!=200){
-                throw new ThriftServerException(response.getMessage(),response.getCode());
-            }
-
+            boolean response = client.canScheduleMeeting(meetingServiceDTO);
             Map<String, Object> data = new HashMap<>();
-            data.put("canSchedule",true);
+            data.put("canSchedule",response);
             return data;
-        } catch (TException ex){
-            throw new TException(ex.getMessage());
+        } catch (MeetingException ex){
+            throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
 
     }
@@ -60,16 +56,11 @@ public class ThriftMeetingService {
     public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             meetingValidator.meetingScheduleValidator(meetingServiceDTO);
-            IMeetingServiceResponse response = client.meetingSchedule(meetingServiceDTO);
+            IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
+            return response;
 
-            if(response.getCode()!=200){
-                throw new ThriftServerException(response.getMessage(),response.getCode());
-            }
-
-            return response.getData();
-
-        } catch (TException ex){
-            throw new TException(ex.getMessage());
+        } catch (MeetingException ex){
+            throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
     }
 

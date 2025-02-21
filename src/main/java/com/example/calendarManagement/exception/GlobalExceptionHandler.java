@@ -1,6 +1,7 @@
 package com.example.calendarManagement.exception;
 
 import com.example.calendarManagement.dto.ResponseDTO;
+import com.example.thriftMeeting.MeetingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.springframework.http.ResponseEntity;
@@ -15,12 +16,11 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(TException.class)
-    public ResponseEntity<ResponseDTO> handleThriftServerException(TException ex){
-
+    @ExceptionHandler(MeetingException.class)
+    public ResponseEntity<ResponseDTO> MeetingException(MeetingException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
-        ResponseDTO response = new ResponseDTO("Error from Thrift server", 500, null, error);
+        ResponseDTO response = new ResponseDTO("Error from meeting scheduling", ex.getErrorCode(), null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
