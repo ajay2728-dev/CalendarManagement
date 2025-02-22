@@ -2,6 +2,7 @@ package com.example.calendarManagement.service;
 
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.dto.EmployeeResponseDTO;
+import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -41,7 +42,7 @@ public class EmployeeService {
                 employee.getDepartment(),
                 employee.getActive(),
                 employee.getSalary()
-                 );
+        );
 
         try {
             EmployeeModel saveEmployee = employeeRepo.save(newEmployee);
@@ -65,7 +66,7 @@ public class EmployeeService {
         }
 
         if(!employeeOpt.get().getActive()){
-            throw new NotFoundException("Employee is no longer work here.");
+            throw new NotFoundException("Employee no longer work here.");
         }
 
         log.info("fetched employee details ...");

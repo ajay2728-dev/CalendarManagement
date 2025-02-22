@@ -28,7 +28,7 @@ public class EmployeeController {
     EmployeeValidator employeeValidator;
 
     @PostMapping
-    public ResponseEntity<ResponseDTO> addEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO){
+    public ResponseEntity<ResponseDTO> addEmployee(@RequestHeader(value = "RequestId", required = false) String requestId, @RequestBody EmployeeRequestDTO employeeRequestDTO){
         log.info("add employee controller  ...");
 
         log.info("validation for adding employee ...");

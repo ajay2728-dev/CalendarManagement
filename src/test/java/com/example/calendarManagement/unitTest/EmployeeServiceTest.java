@@ -74,7 +74,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.empty());
         Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
 
-        EmployeeResponseDTO result = employeeService.addEmployee(inputEmployee);
+        EmployeeResponseDTO result = employeeService.addEmployee(inputEmployee,office);
 
         assertThat(result).isNotNull();
         assertThat(result.getEmployeeId()).isEqualTo(1);
@@ -85,7 +85,7 @@ public class EmployeeServiceTest {
     @Test
     public void test_whenAddEmployee_givenMissingInput_ThrowEmployeeMissingInputException(){
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    employeeService.addEmployee(missingInputEmployee);
+                    employeeService.addEmployee(missingInputEmployee,office);
                 }
         );
         assertEquals("Missing Required Input",thrownException.getMessage());
@@ -95,7 +95,7 @@ public class EmployeeServiceTest {
     public void test_whenAddEmployee_givenInvalidEmail_ThrowEmployeeInvalidInputException() {
 
         InvalidFieldException thrownException = assertThrows(InvalidFieldException.class,()->{
-                    employeeService.addEmployee(invalidEmailEmployee);
+                    employeeService.addEmployee(invalidEmailEmployee,office);
                 }
         );
         assertEquals("Invalid Email Format",thrownException.getMessage());

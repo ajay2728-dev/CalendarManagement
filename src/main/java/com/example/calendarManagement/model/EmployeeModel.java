@@ -14,7 +14,7 @@ public class EmployeeModel {
     @Column(name = "employeeName",nullable = false)
     private String employeeName;
 
-    @Column(name = "employeeEmail", unique = true,nullable = false)
+    @Column(name = "employeeEmail", unique = true, nullable = false)
     private String employeeEmail;
 
     @ManyToOne

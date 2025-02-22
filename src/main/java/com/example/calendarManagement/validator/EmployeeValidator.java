@@ -35,8 +35,16 @@ public class EmployeeValidator {
         }
 
         // checking unique employee email
-        if(employeeRepo.findByEmployeeEmail(employee.getEmployeeEmail()).isPresent()){
+        Optional<EmployeeModel> employeeModelOpt = employeeRepo.findByEmployeeEmail(employee.getEmployeeEmail());
+
+        // employee already have given email and is working
+        if( employeeModelOpt.isPresent() && employeeModelOpt.get().getActive()){
             throw new ConstraintViolationException("Employee with given email already existing.");
+        }
+
+        // employee already have given email and is not working
+        if( employeeModelOpt.isPresent() && !employeeModelOpt.get().getActive()){
+            throw new ConstraintViolationException("Give Different Employee email to add previous working employee.");
         }
 
         Optional<OfficeModel> officeOpt = officeRepo.findById(employee.getOfficeID());
@@ -58,7 +66,7 @@ public class EmployeeValidator {
         }
 
         if(!employeeOpt.get().getActive()){
-            throw new NotFoundException("Employee no longer work here");
+            throw new NotFoundException("Employee already deleted.");
         }
 
         return employeeOpt.get();
