@@ -37,6 +37,10 @@ public class MeetingRoomValidator {
             throw new NotFoundException("provided office not found");
         }
 
+        if(meetingRoomRepo.findByRoomName(meetingRoom.getRoomName()).isPresent()){
+            throw new ConstraintViolationException("Give Different Room Name");
+        }
+
         // no. of office room
         int countMeetingRoom = meetingRoomRepo.countByOffice(office.get());
 

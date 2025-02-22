@@ -88,10 +88,12 @@ public class EmployeeService {
 
         // delete employee
         validEmployee.setActive(false);
-        employeeRepo.save(validEmployee);
-
-        // return delete employee
-        return validEmployee;
+        try {
+            employeeRepo.save(validEmployee);
+            return validEmployee;
+        } catch (RuntimeException ex){
+            throw new RuntimeException("An error occurred while deleting the employee: " + ex.getMessage());
+        }
 
     }
 }

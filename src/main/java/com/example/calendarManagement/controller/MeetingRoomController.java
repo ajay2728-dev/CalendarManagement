@@ -17,7 +17,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/meetingroom")
+@RequestMapping("/api/meeting-room")
 public class MeetingRoomController {
 
     @Autowired
@@ -55,7 +55,7 @@ public class MeetingRoomController {
     }
 
 
-    @PutMapping("/update-status/enable")
+    @PutMapping("/update-status/enable/{meetingRoomId}")
     public ResponseEntity<ResponseDTO> updateMeetingRoomStatusToEnable(@PathVariable int meetingRoomId ){
         log.info("updating meeting room status to enable controller ...");
 
@@ -69,7 +69,7 @@ public class MeetingRoomController {
 
     }
 
-    @PutMapping("/update-status/disable")
+    @PutMapping("/update-status/disable/{meetingRoomId}")
     public ResponseEntity<ResponseDTO> updateMeetingRoomStatusToDisable(@PathVariable int meetingRoomId){
         log.info("updating meeting room status");
 
