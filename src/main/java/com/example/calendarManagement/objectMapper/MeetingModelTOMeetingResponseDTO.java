@@ -12,8 +12,7 @@ public class MeetingModelTOMeetingResponseDTO {
                 meetingModel.getDescription(),
                 meetingModel.getAgenda(),
                 meetingModel.getStatuses().stream()
-                        .flatMap(status -> status.getEmployees().stream())
-                        .map(employee -> employee.getEmployeeId())
+                        .map(i -> i.getEmployee().getEmployeeId())
                         .collect(Collectors.toList()),
                 meetingModel.getStartTime().toString(),
                 meetingModel.getEndTime().toString(),

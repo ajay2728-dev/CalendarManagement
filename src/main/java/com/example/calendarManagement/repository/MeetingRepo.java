@@ -15,12 +15,10 @@ public interface MeetingRepo extends JpaRepository<MeetingModel,Integer> {
     @Query("SELECT m FROM MeetingModel m WHERE m.meetingId = :meetingId AND m.isValid = true")
     Optional<MeetingModel> findValidMeeting(@Param("meetingId") int meetingId);
 
-    @Query("SELECT m FROM MeetingModel m " +
-            "JOIN m.statuses ms " +
-            "JOIN ms.employees e " +
-            "WHERE e.employeeId = :employeeId " +
-            "AND m.startTime BETWEEN :startDate AND :endDate " +
-            "AND m.isValid = true")
+    @Query("SELECT ems.meeting FROM EmployeeMeetingStatusModel ems " +
+            "WHERE ems.employee.employeeId = :employeeId " +
+            "AND ems.meeting.startTime >= :startDate " +
+            "AND ems.meeting.endTime <= :endDate")
 
     List<MeetingModel> findByEmployeeIdAndDateRange(
             @Param("employeeId") int employeeId,

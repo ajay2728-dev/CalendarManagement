@@ -24,6 +24,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ResponseDTO> handleRuntimeException( RuntimeException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+        ResponseDTO response = new ResponseDTO("Error from Data base", 500, null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
+
     @ExceptionHandler(ThriftServerException.class)
     public ResponseEntity<ResponseDTO> handleThriftException( ThriftServerException ex){
         Map<String, Object> error = new HashMap<>();
@@ -50,14 +58,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-//    @ExceptionHandler(NonUniqueFieldException.class)
-//    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueFieldException ex){
-//        Map<String, Object> error = new HashMap<>();
-//        error.put("detail", ex.getMessage());
-//
-//        ResponseDTO response = new ResponseDTO("Non Unique Data Added Error ", 400, null, error);
-//        return ResponseEntity.badRequest().body(response);
-//    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundException ex){

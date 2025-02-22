@@ -23,9 +23,6 @@ import java.util.Map;
 public class ThriftMeetingService {
     private final IMeetingService.Client client;
 
-    @Autowired
-    private MeetingValidator meetingValidator;
-
     public ThriftMeetingService(){
         try {
             log.info("meeting thrift ...");
@@ -41,11 +38,15 @@ public class ThriftMeetingService {
 
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
-            meetingValidator.canScheduleValidator(meetingServiceDTO);
+
+            log.info("making an can schedule call to thrift server ...");
             boolean response = client.canScheduleMeeting(meetingServiceDTO);
+            log.info("response is come from thrift server ...");
+
             Map<String, Object> data = new HashMap<>();
             data.put("canSchedule",response);
             return data;
+
         } catch (MeetingException ex){
             throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
@@ -55,10 +56,8 @@ public class ThriftMeetingService {
 
     public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
-            meetingValidator.meetingScheduleValidator(meetingServiceDTO);
             IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
             return response;
-
         } catch (MeetingException ex){
             throw new MeetingException(ex.getMessage(), ex.errorCode);
         }

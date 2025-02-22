@@ -6,9 +6,8 @@ import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.*;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.repository.MeetingRepo;
-import com.example.calendarManagement.repository.MeetingStatusRepo;
+import com.example.calendarManagement.repository.EmployeeMeetingStatusRepo;
 import com.example.calendarManagement.service.MeetingService;
-import com.example.calendarManagement.service.ThriftMeetingService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,9 +28,9 @@ import static org.mockito.Mockito.doNothing;
 public class MeetingServiceTest {
 
     Set<EmployeeModel> employees = new HashSet<>();
-    private MeetingStatusModel savedMeetingStatusModel;
+    private EmployeeMeetingStatusModel savedEmployeeMeetingStatusModel;
     private List<MeetingModel> mockMeetings;
-    private MeetingStatusModel updateMeetingStatusModel;
+    private EmployeeMeetingStatusModel updateEmployeeMeetingStatusModel;
     private MeetingStatusDTO meetingStatusDTO;
     private MeetingStatusDTO missingMeetingStatusDTO;
     private EmployeeModel savedEmployee;
@@ -43,7 +42,7 @@ public class MeetingServiceTest {
     private MeetingService meetingService;
 
     @Mock
-    private MeetingStatusRepo meetingStatusRepo;
+    private EmployeeMeetingStatusRepo meetingStatusRepo;
 
     @Mock
     private MeetingRepo meetingRepo;
@@ -72,8 +71,8 @@ public class MeetingServiceTest {
                 true, 50000 );
 
         employees.add(savedEmployee);
-        savedMeetingStatusModel = new MeetingStatusModel(1,meetingModel,true,employees);
-        updateMeetingStatusModel =  new MeetingStatusModel(1,meetingModel,false,employees);
+        savedEmployeeMeetingStatusModel = new EmployeeMeetingStatusModel(meetingModel,true,savedEmployee);
+        updateEmployeeMeetingStatusModel =  new EmployeeMeetingStatusModel(meetingModel,false,savedEmployee);
         meetingStatusDTO = new MeetingStatusDTO(1,1,false);
         missingMeetingStatusDTO = new MeetingStatusDTO(0,1,null);
 
@@ -99,12 +98,12 @@ public class MeetingServiceTest {
     void test_whenUpdatingMeetingStatus_givenValidInput_updateMeetingStatusSuccess(){
 
         Mockito.when(meetingStatusRepo.findMeetingStatusByEmployeeAndMeeting(Mockito.anyInt(),Mockito.anyInt())).
-                thenReturn(Optional.of(savedMeetingStatusModel));
+                thenReturn(Optional.of(savedEmployeeMeetingStatusModel));
 
-        Mockito.when(meetingStatusRepo.save(Mockito.any(MeetingStatusModel.class))).
-                thenReturn(updateMeetingStatusModel);
+        Mockito.when(meetingStatusRepo.save(Mockito.any(EmployeeMeetingStatusModel.class))).
+                thenReturn(updateEmployeeMeetingStatusModel);
 
-        MeetingStatusDTO result = meetingService.updateStatusMeeting(meetingStatusDTO);
+        MeetingStatusDTO result = meetingService.updateEmployeeMeetingStatus(meetingStatusDTO);
 
         assertThat(result).isNotNull();
         assertThat(result.isStatus()).isEqualTo(meetingStatusDTO.isStatus());
@@ -114,7 +113,7 @@ public class MeetingServiceTest {
     @Test
     public void test_whenUpdatingMeetingStatus_givenMissingInput_ThrowMissingInputException(){
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    meetingService.updateStatusMeeting(missingMeetingStatusDTO);
+                    meetingService.updateEmployeeMeetingStatus(missingMeetingStatusDTO);
                 }
         );
         assertEquals("Input Field for update meeting status is missing",thrownException.getMessage());
@@ -126,7 +125,7 @@ public class MeetingServiceTest {
                 thenReturn(Optional.empty());
 
         NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-                    meetingService.updateStatusMeeting(meetingStatusDTO);
+                    meetingService.updateEmployeeMeetingStatus(meetingStatusDTO);
                 }
         );
         assertEquals("meeting status not found with give employeeId and meetingId",thrownException.getMessage());

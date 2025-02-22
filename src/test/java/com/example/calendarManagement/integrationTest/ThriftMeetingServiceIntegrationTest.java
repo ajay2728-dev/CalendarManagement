@@ -42,7 +42,7 @@ public class ThriftMeetingServiceIntegrationTest {
 
     @Test
     void test_canScheduleMeeting(){
-        String url = baseUrl+"/schedule";
+        String url = baseUrl+"/can-schedule";
         ResponseDTO response = restTemplate.postForObject(url,meetingServiceDTO,ResponseDTO.class);
 
         assertThat(response).isNotNull();
@@ -53,7 +53,8 @@ public class ThriftMeetingServiceIntegrationTest {
     }
 
     @Test
-    void test_meetingSchdedule(){
+    void test_meetingSchedule(){
+        String url = baseUrl+"/schedule";
         meetingServiceDTO.setDescription("on boarding meeting");
         meetingServiceDTO.setAgenda("Check update of intern work");
         ResponseDTO response = restTemplate.postForObject(baseUrl,meetingServiceDTO, ResponseDTO.class);

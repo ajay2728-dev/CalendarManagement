@@ -5,17 +5,15 @@ import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
-import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.MeetingModel;
-import com.example.calendarManagement.model.MeetingStatusModel;
+import com.example.calendarManagement.model.EmployeeMeetingStatusModel;
 import com.example.calendarManagement.objectMapper.ListMeetingModelToListEmployeeMeetingResponse;
 import com.example.calendarManagement.objectMapper.MeetingModelTOMeetingResponseDTO;
 import com.example.calendarManagement.repository.EmployeeRepo;
 import com.example.calendarManagement.repository.MeetingRepo;
-import com.example.calendarManagement.repository.MeetingStatusRepo;
-import org.aspectj.weaver.ast.Not;
+import com.example.calendarManagement.repository.EmployeeMeetingStatusRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +26,7 @@ import java.util.Optional;
 public class MeetingService {
 
     @Autowired
-    private MeetingStatusRepo meetingStatusRepo;
+    private EmployeeMeetingStatusRepo employeeMeetingStatusRepo;
 
     @Autowired
     private EmployeeRepo employeeRepo;
@@ -36,33 +34,16 @@ public class MeetingService {
     @Autowired
     private MeetingRepo meetingRepo;
 
-    public MeetingStatusDTO updateStatusMeeting(MeetingStatusDTO meetingStatusDTO) {
-
-        // validation check
-        if(meetingStatusDTO.getMeetingId()==0 || meetingStatusDTO.getEmployeeId()==0 || meetingStatusDTO.isStatus()==null){
-            throw new MissingFieldException("Input Field for update meeting status is missing");
-        }
-
-        int employeeId = meetingStatusDTO.getEmployeeId();
-        int meetingId = meetingStatusDTO.getMeetingId();
-
-        // check meetingId and employeeId in meeting status model
-        Optional<MeetingStatusModel> exitingMeetingStatusOpt = meetingStatusRepo.findMeetingStatusByEmployeeAndMeeting(employeeId,meetingId);
-
-        if(!exitingMeetingStatusOpt.isPresent()){
-            throw new NotFoundException("meeting status not found with give employeeId and meetingId");
-        }
-
-        MeetingStatusModel exitingMeetingStatus = exitingMeetingStatusOpt.get();
+    public MeetingStatusDTO updateEmployeeMeetingStatus(MeetingStatusDTO meetingStatusDTO, EmployeeMeetingStatusModel employeeMeetingStatus) {
 
         // update meeting status
-        exitingMeetingStatus.setStatus(meetingStatusDTO.isStatus());
-        meetingStatusRepo.save(exitingMeetingStatus);
+        employeeMeetingStatus.setMeetingStatus(meetingStatusDTO.isStatus());
+        employeeMeetingStatusRepo.save(employeeMeetingStatus);
 
         // return meeting status
         MeetingStatusDTO updatedMeetingStatus = new MeetingStatusDTO(meetingStatusDTO.getMeetingId(),
                 meetingStatusDTO.getEmployeeId(),
-                exitingMeetingStatus.getStatus());
+                employeeMeetingStatus.getMeetingStatus());
 
         return updatedMeetingStatus;
     }
@@ -91,7 +72,7 @@ public class MeetingService {
         }
 
         MeetingModel existingMeeting = meetingModelOpt.get();
-        meetingStatusRepo.updateMeetingStatusToFalse(meetingId);
+        employeeMeetingStatusRepo.updateMeetingStatusToFalse(meetingId);
         existingMeeting.setValid(false);
         meetingRepo.save(existingMeeting);
 

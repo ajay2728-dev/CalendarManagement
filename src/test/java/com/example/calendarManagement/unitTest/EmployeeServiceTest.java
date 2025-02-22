@@ -1,6 +1,7 @@
 package com.example.calendarManagement.unitTest;
 
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
+import com.example.calendarManagement.dto.EmployeeResponseDTO;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -73,7 +74,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.empty());
         Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
 
-        EmployeeModel result = employeeService.addEmployee(inputEmployee);
+        EmployeeResponseDTO result = employeeService.addEmployee(inputEmployee);
 
         assertThat(result).isNotNull();
         assertThat(result.getEmployeeId()).isEqualTo(1);
@@ -108,7 +109,7 @@ public class EmployeeServiceTest {
         Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
                 true, 50000)));
 
-        EmployeeRequestDTO result = employeeService.getEmployeeById(1);
+        EmployeeResponseDTO result = employeeService.getEmployeeById(1);
 
         assertThat(result).isNotNull();
         assertThat(result.getEmployeeId()).isEqualTo(1);
@@ -132,7 +133,7 @@ public class EmployeeServiceTest {
     public void test_WhenGetAllEmployee_RetrievedSuccess(){
         Mockito.when(employeeRepo.findAll()).thenReturn(mockEmployees);
 
-        List<EmployeeRequestDTO> result = employeeService.getAllEmployee();
+        List<EmployeeResponseDTO> result = employeeService.getAllEmployee();
 
         assertThat(result).isNotNull();
         assertThat(result.size()).isEqualTo(2);
@@ -150,9 +151,9 @@ public class EmployeeServiceTest {
        Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
                true, 50000));
 
-       EmployeeModel result = employeeService.deleteEmployeeById(1);
+       EmployeeModel result = employeeService.deleteEmployeeById(savedEmployee);
 
-       assertThat(result.getIsActive()).isEqualTo(false);
+       assertThat(result.getActive()).isEqualTo(false);
        assertThat(result.getEmployeeId()).isEqualTo(1);
 
     }
