@@ -17,8 +17,11 @@ public interface MeetingRepo extends JpaRepository<MeetingModel,Integer> {
 
     @Query("SELECT ems.meeting FROM EmployeeMeetingStatusModel ems " +
             "WHERE ems.employee.employeeId = :employeeId " +
-            "AND ems.meeting.startTime >= :startDate " +
-            "AND ems.meeting.endTime <= :endDate")
+            "AND (:startDate BETWEEN ems.meeting.startTime AND ems.meeting.endTime " +
+            " OR :endDate BETWEEN ems.meeting.startTime AND ems.meeting.endTime " +
+            " OR ems.meeting.startTime BETWEEN :startDate AND :endDate " +
+            " OR ems.meeting.endTime BETWEEN :startDate AND :endDate) AND ems.meetingStatus = true"
+    )
 
     List<MeetingModel> findByEmployeeIdAndDateRange(
             @Param("employeeId") int employeeId,

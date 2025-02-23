@@ -5,6 +5,7 @@ import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
+import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.MeetingModel;
