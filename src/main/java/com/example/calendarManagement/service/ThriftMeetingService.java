@@ -14,14 +14,19 @@ import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service
 public class ThriftMeetingService {
     private final IMeetingService.Client client;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
     public ThriftMeetingService(){
         try {
@@ -62,5 +67,24 @@ public class ThriftMeetingService {
             throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
     }
+
+//    public CompletableFuture<IMeetingServiceDTO> meetingSchedule(IMeetingServiceDTO meetingServiceDTO) {
+//        log.info("Main Thread: {}", Thread.currentThread().getName());
+//        return CompletableFuture.supplyAsync(() -> {
+//            log.info("Async Execution Thread: {}", Thread.currentThread().getName());
+//            try {
+//                log.info("Calling Thrift server to schedule meeting asynchronously...");
+//                return client.meetingSchedule(meetingServiceDTO);
+//            } catch (MeetingException ex) {
+//                try {
+//                    throw new MeetingException(ex.getMessage(), ex.errorCode);
+//                } catch (MeetingException e) {
+//                    throw new RuntimeException(e);
+//                }
+//            } catch (TException ex) {
+//                throw new RuntimeException("Thrift communication error", ex);
+//            }
+//        }, executor);
+//    }
 
 }

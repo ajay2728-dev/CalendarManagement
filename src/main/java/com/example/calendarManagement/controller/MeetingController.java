@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @RestController
@@ -68,6 +69,26 @@ public class MeetingController {
         return ResponseEntity.ok(responseBody);
 
     }
+
+    // aysnc
+//    @PostMapping("/schedule")
+//    public CompletableFuture<ResponseEntity<ResponseDTO>> meetingSchedule(@RequestBody MeetingRequestDTO meetingDetails) throws TException {
+//        log.info("Scheduling the meeting asynchronously...");
+//
+//        IMeetingServiceDTO meetingServiceDTO = MeetingRequestToIMeetingDTO.map(meetingDetails);
+//        log.info("validation of meeting schedule ...");
+//        meetingValidator.canScheduleValidator(meetingServiceDTO);
+//        log.info("validation is done ...");
+//
+//        return thriftMeetingService.meetingSchedule(meetingServiceDTO)
+//                .thenApply(body -> {
+//                    MeetingRequestDTO responseMeetingDetails = IMeetingToMeetingRequest.map(body);
+//                    Map<String, Object> data = new HashMap<>();
+//                    data.put("body", responseMeetingDetails);
+//                    ResponseDTO responseBody = new ResponseDTO("Meeting scheduled successfully", 201, data, null);
+//                    return ResponseEntity.ok(responseBody);
+//                });
+//    }
 
     @PutMapping("/employee/update-status")
     public ResponseEntity<ResponseDTO> updateStatusMeeting(@RequestBody MeetingStatusDTO meetingStatusDTO){
@@ -124,6 +145,5 @@ public class MeetingController {
         ResponseDTO responseBody = new ResponseDTO("Meetings retrieved successfully",200,data,null);
         return ResponseEntity.ok(responseBody);
     }
-
 
 }
