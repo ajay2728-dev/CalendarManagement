@@ -6,9 +6,7 @@ import com.example.calendarManagement.objectMapper.IMeetingToMeetingRequest;
 import com.example.calendarManagement.objectMapper.MeetingRequestToIMeetingDTO;
 import com.example.calendarManagement.service.MeetingService;
 import com.example.calendarManagement.service.ThriftMeetingService;
-import com.example.calendarManagement.validator.MeetingRoomValidator;
 import com.example.calendarManagement.validator.MeetingValidator;
-import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
@@ -58,6 +56,10 @@ public class MeetingController {
         log.info("scheduling the meeting ...");
 
         IMeetingServiceDTO  meetingServiceDTO = MeetingRequestToIMeetingDTO.map(meetingDetails);
+        log.info("validation of meeting schedule ...");
+        meetingValidator.canScheduleValidator(meetingServiceDTO);
+        log.info("validation is done ...");
+
         IMeetingServiceDTO body = thriftMeetingService.meetingSchedule(meetingServiceDTO);
         MeetingRequestDTO responseMeetingDetails =  IMeetingToMeetingRequest.map(body);
         Map<String, Object> data = new HashMap<>();

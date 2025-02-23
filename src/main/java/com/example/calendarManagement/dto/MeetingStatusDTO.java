@@ -4,12 +4,12 @@ public class MeetingStatusDTO {
 
     private int meetingId;
     private int employeeId;
-    private Boolean status;
+    private Boolean meetingStatus;
 
-    public MeetingStatusDTO(int meetingId, int employeeId, Boolean status) {
+    public MeetingStatusDTO(int meetingId, int employeeId, Boolean meetingStatus) {
         this.meetingId = meetingId;
         this.employeeId = employeeId;
-        this.status = status;
+        this.meetingStatus = meetingStatus;
     }
 
     public MeetingStatusDTO() {
@@ -33,10 +33,10 @@ public class MeetingStatusDTO {
     }
 
     public Boolean isStatus() {
-        return status;
+        return meetingStatus;
     }
 
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setStatus(Boolean meetingStatus) {
+        this.meetingStatus = meetingStatus;
     }
 }

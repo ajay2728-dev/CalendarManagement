@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface EmployeeMeetingStatusRepo extends JpaRepository<EmployeeMeetingStatusModel,Integer> {
-    @Query(value = "SELECT * FROM EmployeeMeetingStatusModel ms WHERE ms.employee.employeeId = :employeeId AND ms.meeting.meetingId = :meetingId", nativeQuery = true)
+    @Query(value = "SELECT * FROM employee_meeting_status_model ms WHERE ms.employee_id = :employeeId AND ms.meeting_id = :meetingId", nativeQuery = true)
     Optional<EmployeeMeetingStatusModel> findMeetingStatusByEmployeeAndMeeting(
             @Param("employeeId") int employeeId,
             @Param("meetingId") int meetingId
