@@ -27,6 +27,9 @@ public class EmployeeService {
     @Autowired
     private OfficeRepo officeRepo;
 
+    @Autowired
+    private EmployeeModelToEmployeeResponseDTO employeeModelToEmployeeResponseDTO;
+
 
     // method to add employee
     public EmployeeResponseDTO addEmployee(EmployeeRequestDTO employee, OfficeModel office) {
@@ -42,7 +45,7 @@ public class EmployeeService {
 
         try {
             EmployeeModel saveEmployee = employeeRepo.save(newEmployee);
-            EmployeeResponseDTO response = EmployeeModelToEmployeeResponseDTO.map(saveEmployee);
+            EmployeeResponseDTO response = employeeModelToEmployeeResponseDTO.map(saveEmployee);
             return response;
         } catch (RuntimeException ex){
             throw new RuntimeException("An error occurred while saving the employee: " + ex.getMessage());
@@ -67,7 +70,7 @@ public class EmployeeService {
 
         log.info("fetched employee details ...");
         EmployeeModel employee = employeeOpt.get();
-        EmployeeResponseDTO response = EmployeeModelToEmployeeResponseDTO.map(employee);
+        EmployeeResponseDTO response = employeeModelToEmployeeResponseDTO.map(employee);
 
         // return the employee
         return response;

@@ -2,13 +2,17 @@ package com.example.calendarManagement.unitTest;
 
 import com.example.calendarManagement.dto.EmployeeRequestDTO;
 import com.example.calendarManagement.dto.EmployeeResponseDTO;
+import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.EmployeeModel;
 import com.example.calendarManagement.model.OfficeModel;
+import com.example.calendarManagement.objectMapper.EmployeeModelToEmployeeResponseDTO;
 import com.example.calendarManagement.repository.EmployeeRepo;
+import com.example.calendarManagement.repository.OfficeRepo;
 import com.example.calendarManagement.service.EmployeeService;
+import com.example.calendarManagement.validator.EmployeeValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,8 +26,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
 public class EmployeeServiceTest {
@@ -34,12 +37,22 @@ public class EmployeeServiceTest {
     private EmployeeRequestDTO invalidEmailEmployee;
     private OfficeModel office;
     List<EmployeeModel> mockEmployees;
+    private EmployeeResponseDTO expectedResponse;
 
     @Mock
     EmployeeRepo employeeRepo;
 
     @InjectMocks
     EmployeeService employeeService;
+
+    @InjectMocks
+    EmployeeValidator employeeValidator;
+
+    @Mock
+    EmployeeModelToEmployeeResponseDTO employeeMapper;
+
+    @Mock
+    OfficeRepo officeRepo;
 
     @BeforeEach
     void setup(){
@@ -65,27 +78,37 @@ public class EmployeeServiceTest {
                         office, "Engineering", true, 30000)
         );
 
+        expectedResponse = new EmployeeResponseDTO(1, "John Doe", 1,
+                "john.doe@xyz.com", 30000, true, "Engineering");
+
 
     }
 
     @Test
     public void test_whenAddEmployee_givenValidEmployee_AddEmployeeSuccess()  {
+       Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
+       Mockito.when(employeeMapper.map(savedEmployee)).thenReturn(expectedResponse);
 
-        Mockito.when(employeeRepo.findByEmployeeEmail("john.doe@xyz.com")).thenReturn(Optional.empty());
-        Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
+       EmployeeResponseDTO actualResponse = employeeService.addEmployee(inputEmployee, office);
+       assertThat(actualResponse).isNotNull();
+       assertThat(actualResponse.getEmployeeName()).isEqualTo(inputEmployee.getEmployeeName());
+    }
 
-        EmployeeResponseDTO result = employeeService.addEmployee(inputEmployee,office);
+    @Test
+    void addEmployee_Failure() {
+        Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenThrow(new RuntimeException("Database error"));
 
-        assertThat(result).isNotNull();
-        assertThat(result.getEmployeeId()).isEqualTo(1);
-        assertThat(result.getEmployeeName()).isEqualTo("John Doe");
-        assertThat(result.getEmployeeEmail()).isEqualTo("john.doe@xyz.com");
+        RuntimeException exception = assertThrows(RuntimeException.class, () -> {
+            employeeService.addEmployee(inputEmployee, office);
+        });
+
+        assertTrue(exception.getMessage().contains("An error occurred while saving the employee"));
     }
 
     @Test
     public void test_whenAddEmployee_givenMissingInput_ThrowEmployeeMissingInputException(){
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    employeeService.addEmployee(missingInputEmployee,office);
+            employeeValidator.addEmployeeValidator(missingInputEmployee);
                 }
         );
         assertEquals("Missing Required Input",thrownException.getMessage());
@@ -95,19 +118,53 @@ public class EmployeeServiceTest {
     public void test_whenAddEmployee_givenInvalidEmail_ThrowEmployeeInvalidInputException() {
 
         InvalidFieldException thrownException = assertThrows(InvalidFieldException.class,()->{
-                    employeeService.addEmployee(invalidEmailEmployee,office);
+            employeeValidator.addEmployeeValidator(invalidEmailEmployee);
                 }
         );
         assertEquals("Invalid Email Format",thrownException.getMessage());
 
     }
 
+    @Test
+    public void test_whenAddEmployee_whenEmailAlreadyExistsAndActive_thenThrowConstraintViolationException(){
+        Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
+                .thenReturn(Optional.of(savedEmployee));
+
+        assertThrows(ConstraintViolationException.class, () ->
+                employeeValidator.addEmployeeValidator(inputEmployee)
+        );
+    }
+
+    @Test
+    public void test_whenAddEmployee_whenEmailAlreadyExistsAndInactive_thenThrowConstraintViolationException(){
+        savedEmployee.setActive(false);
+        Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
+                .thenReturn(Optional.of(savedEmployee));
+
+        assertThrows(ConstraintViolationException.class, () ->
+                employeeValidator.addEmployeeValidator(inputEmployee)
+        );
+    }
+
+    @Test
+    public void test_whenOfficeNotFound_thenThrowNotFoundException(){
+        Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
+                .thenReturn(Optional.empty());
+
+        Mockito.when(officeRepo.findById(Mockito.any()))
+                .thenReturn(Optional.empty());
+
+        assertThrows(NotFoundException.class, () ->
+                employeeValidator.addEmployeeValidator(inputEmployee)
+        );
+    }
+
 
     @Test
     public void test_WhenGetEmployeeById_givenValidId_GetEmployeeSuccess()  {
 
-        Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
-                true, 50000)));
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(savedEmployee));
+        Mockito.when(employeeMapper.map(savedEmployee)).thenReturn(expectedResponse);
 
         EmployeeResponseDTO result = employeeService.getEmployeeById(1);
 
@@ -125,13 +182,25 @@ public class EmployeeServiceTest {
             employeeService.getEmployeeById(100);
         });
 
-        assertEquals("No employee exists with the given ID",thrownException.getMessage());
+        assertEquals("No employee exists with the given ID.",thrownException.getMessage());
 
     }
 
     @Test
+    public void test_whenEmployeeExistsButInactive_thenThrowNotFoundException() {
+
+        savedEmployee.setActive(false);
+        Mockito.when(employeeRepo.findById(Mockito.anyInt()))
+                .thenReturn(Optional.of(savedEmployee));
+
+        assertThrows(NotFoundException.class, () ->
+                employeeService.getEmployeeById(1)
+        );
+    }
+
+    @Test
     public void test_WhenGetAllEmployee_RetrievedSuccess(){
-        Mockito.when(employeeRepo.findAll()).thenReturn(mockEmployees);
+        Mockito.when(employeeRepo.findAllValidEmployee()).thenReturn(mockEmployees);
 
         List<EmployeeResponseDTO> result = employeeService.getAllEmployee();
 
@@ -144,18 +213,28 @@ public class EmployeeServiceTest {
 
     @Test
     public void test_WhenDeleteEmployee_givenValidId_DeleteEmployeeSuccess() throws Exception {
+        savedEmployee.setActive(false);
+        Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
+        EmployeeModel result = employeeService.deleteEmployeeById(savedEmployee);
 
-       Mockito.when(employeeRepo.findById(1)).thenReturn(Optional.of(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
-               true, 50000)));
+        assertThat(result).isNotNull();
+        assertThat(result.getActive()).isEqualTo(false);
+    }
 
-       Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(new EmployeeModel(1,"John Doe", "john.doe@xyz.com", office,"Engineering",
-               true, 50000));
+    @Test
+    public void test_WhenEmployeeDoesNotExist_ShouldThrowNotFoundException(){
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class, () -> employeeValidator.deleteEmployeeValidator(100));
+        assertEquals("Employee Does not Exit with Given ID",thrownException.getMessage());
+    }
 
-       EmployeeModel result = employeeService.deleteEmployeeById(savedEmployee);
+    @Test
+    public void test_WhenEmployeeAlreadyDeleted_ShouldThrowNotFoundException() {
+        savedEmployee.setActive(false);
+        Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(savedEmployee));
 
-       assertThat(result.getActive()).isEqualTo(false);
-       assertThat(result.getEmployeeId()).isEqualTo(1);
-
+        NotFoundException thrownException =  assertThrows(NotFoundException.class, () -> employeeValidator.deleteEmployeeValidator(1));
+        assertEquals("Employee already deleted.",thrownException.getMessage());
     }
 
 }
