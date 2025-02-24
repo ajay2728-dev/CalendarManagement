@@ -12,8 +12,10 @@ import java.util.Optional;
 
 @Repository
 public interface MeetingRepo extends JpaRepository<MeetingModel,Integer> {
-    @Query("SELECT m FROM MeetingModel m WHERE m.meetingId = :meetingId AND m.isValid = true")
-    Optional<MeetingModel> findValidMeeting(@Param("meetingId") int meetingId);
+//    @Query("SELECT m FROM MeetingModel m WHERE m.meetingId = :meetingId AND m.isValid = true")
+//    Optional<MeetingModel> findValidMeeting(@Param("meetingId") int meetingId);
+
+    Optional<MeetingModel> findByMeetingIdAndIsValidTrue(int meetingId);
 
     @Query("SELECT ems.meeting FROM EmployeeMeetingStatusModel ems " +
             "WHERE ems.employee.employeeId = :employeeId " +
@@ -21,7 +23,6 @@ public interface MeetingRepo extends JpaRepository<MeetingModel,Integer> {
             "AND ems.meeting.endTime <= :endDate " +
             "AND ems.meetingStatus = true"
     )
-
     List<MeetingModel> findByEmployeeIdAndDateRange(
             @Param("employeeId") int employeeId,
             @Param("startDate") LocalDateTime startDate,

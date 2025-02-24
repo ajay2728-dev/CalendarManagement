@@ -69,7 +69,7 @@ public class MeetingService {
     @Transactional
     public CancelMeetingResponseDTO cancelMeetingById(int meetingId) {
         // check valid meeting id
-        Optional<MeetingModel> meetingModelOpt = meetingRepo.findValidMeeting(meetingId);
+        Optional<MeetingModel> meetingModelOpt = meetingRepo.findByMeetingIdAndIsValidTrue(meetingId);
         if(!meetingModelOpt.isPresent()){
             throw new NotFoundException("Meeting not found with given id " + meetingId);
         }

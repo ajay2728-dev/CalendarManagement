@@ -102,7 +102,6 @@ public class MeetingValidator {
         }
 
         return existingMeetingStatus;
-
     }
 
 }

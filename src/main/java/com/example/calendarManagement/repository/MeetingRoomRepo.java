@@ -10,6 +10,5 @@ import java.util.Optional;
 @Repository
 public interface MeetingRoomRepo  extends JpaRepository<MeetingRoomModel,Integer> {
     int countByOffice(OfficeModel office);
-
     Optional<MeetingRoomModel> findByRoomName(String roomName);
 }
