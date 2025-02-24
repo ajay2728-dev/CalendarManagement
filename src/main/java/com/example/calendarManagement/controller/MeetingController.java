@@ -36,7 +36,7 @@ public class MeetingController {
     MeetingValidator meetingValidator;
 
 
-    @PostMapping("/can-schedule")
+    @PostMapping("/canSchedule")
     public ResponseEntity<ResponseDTO> canScheduleMeeting(@RequestBody MeetingRequestDTO meetingDetails) throws TException {
         log.info("can schedule meeting");
 
@@ -71,7 +71,7 @@ public class MeetingController {
     }
 
 
-    @PutMapping("/employee/update-status")
+    @PutMapping("/employee/updateStatus")
     public ResponseEntity<ResponseDTO> updateStatusMeeting(@RequestBody MeetingStatusDTO meetingStatusDTO){
         log.info("updating meeting status of a employee ...");
 

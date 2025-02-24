@@ -63,17 +63,9 @@ public class MeetingValidator {
             throw new InvalidFieldException("End time must be between 10 AM and 6 PM.");
         }
 
-        // Check if the meeting date is today or a future date
-        LocalDate today = LocalDate.now();
-        LocalDate meetingDate = start.toLocalDate();
-
-        if (meetingDate.isBefore(today)) {
-            throw new InvalidFieldException("Meeting date cannot be in the past.");
-        }
-
         // If the meeting is scheduled for today, ensure the start time is in the future
         LocalDateTime now = LocalDateTime.now();
-        if (meetingDate.isEqual(today) && start.isBefore(now)) {
+        if (start.isBefore(now)) {
             throw new InvalidFieldException("Meeting cannot be scheduled in the past.");
         }
 

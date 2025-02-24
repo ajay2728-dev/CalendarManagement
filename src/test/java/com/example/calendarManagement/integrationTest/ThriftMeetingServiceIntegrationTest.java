@@ -41,7 +41,7 @@ public class ThriftMeetingServiceIntegrationTest {
     }
 
     @Test
-    void test_canScheduleMeeting(){
+    void testCanScheduleMeeting(){
         String url = baseUrl+"/can-schedule";
         ResponseDTO response = restTemplate.postForObject(url,meetingServiceDTO,ResponseDTO.class);
 
@@ -53,7 +53,7 @@ public class ThriftMeetingServiceIntegrationTest {
     }
 
     @Test
-    void test_meetingSchedule(){
+    void testMeetingSchedule(){
         String url = baseUrl+"/schedule";
         meetingServiceDTO.setDescription("on boarding meeting");
         meetingServiceDTO.setAgenda("Check update of intern work");

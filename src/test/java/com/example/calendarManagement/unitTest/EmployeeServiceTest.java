@@ -85,7 +85,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenAddEmployee_givenValidEmployee_AddEmployeeSuccess()  {
+    public void test_whenAddEmployee_givenValidEmployee_addEmployeeSuccess()  {
        Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
        Mockito.when(employeeMapper.map(savedEmployee)).thenReturn(expectedResponse);
 
@@ -106,7 +106,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenAddEmployee_givenMissingInput_ThrowEmployeeMissingInputException(){
+    public void test_whenAddEmployee_givenMissingInput_throwEmployeeMissingInputException(){
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
             employeeValidator.addEmployeeValidator(missingInputEmployee);
                 }
@@ -115,7 +115,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenAddEmployee_givenInvalidEmail_ThrowEmployeeInvalidInputException() {
+    public void test_whenAddEmployee_givenInvalidEmail_throwEmployeeInvalidInputException() {
 
         InvalidFieldException thrownException = assertThrows(InvalidFieldException.class,()->{
             employeeValidator.addEmployeeValidator(invalidEmailEmployee);
@@ -126,7 +126,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenAddEmployee_whenEmailAlreadyExistsAndActive_thenThrowConstraintViolationException(){
+    public void test_whenAddEmployee_whenEmailAlreadyExistsAndActive_throwConstraintViolationException(){
         Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
                 .thenReturn(Optional.of(savedEmployee));
 
@@ -136,7 +136,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenAddEmployee_whenEmailAlreadyExistsAndInactive_thenThrowConstraintViolationException(){
+    public void test_whenAddEmployee_whenEmailAlreadyExistsAndInactive_throwConstraintViolationException(){
         savedEmployee.setActive(false);
         Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
                 .thenReturn(Optional.of(savedEmployee));
@@ -147,7 +147,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_whenOfficeNotFound_thenThrowNotFoundException(){
+    public void test_whenOfficeNotFound_throwNotFoundException(){
         Mockito.when(employeeRepo.findByEmployeeEmail(Mockito.any()))
                 .thenReturn(Optional.empty());
 
@@ -161,7 +161,7 @@ public class EmployeeServiceTest {
 
 
     @Test
-    public void test_WhenGetEmployeeById_givenValidId_GetEmployeeSuccess()  {
+    public void test_whenGetEmployeeById_givenValidId_getEmployeeSuccess()  {
 
         Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(savedEmployee));
         Mockito.when(employeeMapper.map(savedEmployee)).thenReturn(expectedResponse);
@@ -174,7 +174,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_WhenGetEmployeeById_givenValidId_ThrowNotFoundEmployeeException(){
+    public void test_whenGetEmployeeById_givenValidId_throwNotFoundEmployeeException(){
 
         Mockito.when(employeeRepo.findById(100)).thenReturn(Optional.empty());
 
@@ -199,7 +199,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_WhenGetAllEmployee_RetrievedSuccess(){
+    public void test_WhenGetAllEmployee_retrievedSuccess(){
         Mockito.when(employeeRepo.findAllValidEmployee()).thenReturn(mockEmployees);
 
         List<EmployeeResponseDTO> result = employeeService.getAllEmployee();
@@ -212,7 +212,7 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_WhenDeleteEmployee_givenValidId_DeleteEmployeeSuccess() throws Exception {
+    public void test_WhenDeleteEmployee_givenValidId_deleteEmployeeSuccess() throws Exception {
         savedEmployee.setActive(false);
         Mockito.when(employeeRepo.save(Mockito.any(EmployeeModel.class))).thenReturn(savedEmployee);
         EmployeeModel result = employeeService.deleteEmployeeById(savedEmployee);
@@ -222,14 +222,14 @@ public class EmployeeServiceTest {
     }
 
     @Test
-    public void test_WhenEmployeeDoesNotExist_ShouldThrowNotFoundException(){
+    public void test_WhenEmployeeDoesNotExist_shouldThrowNotFoundException(){
         Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
         NotFoundException thrownException = assertThrows(NotFoundException.class, () -> employeeValidator.deleteEmployeeValidator(100));
         assertEquals("Employee Does not Exit with Given ID",thrownException.getMessage());
     }
 
     @Test
-    public void test_WhenEmployeeAlreadyDeleted_ShouldThrowNotFoundException() {
+    public void test_WhenEmployeeAlreadyDeleted_shouldThrowNotFoundException() {
         savedEmployee.setActive(false);
         Mockito.when(employeeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(savedEmployee));
 

@@ -37,7 +37,7 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void test_addMeetingRoom(){
+    void testAddMeetingRoom(){
         ResponseDTO response = restTemplate.postForObject(baseUrl,inputMeetingRoom,ResponseDTO.class);
 
         assertThat(response).isNotNull();
@@ -47,7 +47,7 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void test_enableMeetingRoomStatus(){
+    void testEnableMeetingRoomStatus(){
         String url = baseUrl + "/update-status/enable"+"/"+1;
         saveMeetingRoom.setEnable(false);
         restTemplate.put(url,saveMeetingRoom);
@@ -62,7 +62,7 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void test_disableMeetingRoomStatus(){
+    void testDisableMeetingRoomStatus(){
         String url = baseUrl + "/update-status/disable"+"/"+1;
         saveMeetingRoom.setEnable(false);
         restTemplate.put(url,saveMeetingRoom);
@@ -77,7 +77,7 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void test_gettingMeetingRoomById(){
+    void testGettingMeetingRoomById(){
         String url = baseUrl+"/"+1;
 
         ResponseDTO response = restTemplate.getForObject(url,ResponseDTO.class);

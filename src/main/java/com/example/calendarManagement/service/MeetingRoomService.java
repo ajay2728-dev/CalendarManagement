@@ -38,7 +38,7 @@ public class MeetingRoomService {
 
     }
 
-    public MeetingRoomModel updateStatusMeetingRoom(MeetingRoomModel exitingRoom) {
+    public MeetingRoomModel updateMeetingRoomStatusToDisable(MeetingRoomModel exitingRoom) {
         //update status of meeting room
         exitingRoom.setEnable(false);
         MeetingRoomModel updatedMeetingRoom = meetingRoomRepo.save(exitingRoom);

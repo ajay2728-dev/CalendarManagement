@@ -4,7 +4,6 @@ import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.calendarManagement.model.MeetingRoomModel;
 import com.example.calendarManagement.model.OfficeModel;
-import com.example.calendarManagement.repository.MeetingRoomRepo;
 import com.example.calendarManagement.service.MeetingRoomService;
 import com.example.calendarManagement.validator.MeetingRoomValidator;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import java.util.Map;
 
 @Slf4j
 @RestController
-@RequestMapping("/api/meeting-room")
+@RequestMapping("/api/meetingRoom")
 public class MeetingRoomController {
 
     @Autowired
@@ -31,7 +30,7 @@ public class MeetingRoomController {
         log.info("adding meeting room controller ...");
 
         log.info("validation of adding meeting room ...");
-        OfficeModel office = meetingRoomValidator.ValidatorAddMeetingRoom(meetingRoom);
+        OfficeModel office = meetingRoomValidator.validatorAddMeetingRoom(meetingRoom);
         log.info("validation is done ...");
 
         MeetingRoomModel body = meetingRoomService.addMeetingRoom(meetingRoom,office);
@@ -55,11 +54,11 @@ public class MeetingRoomController {
     }
 
 
-    @PutMapping("/update-status/enable/{meetingRoomId}")
+    @PutMapping("/updateStatus/enable/{meetingRoomId}")
     public ResponseEntity<ResponseDTO> updateMeetingRoomStatusToEnable(@PathVariable int meetingRoomId ){
         log.info("updating meeting room status to enable controller ...");
 
-        MeetingRoomModel meetingRoom = meetingRoomValidator.ValidatorUpdateMeetingRoomStatusToEnable(meetingRoomId);
+        MeetingRoomModel meetingRoom = meetingRoomValidator.validatorUpdateMeetingRoomStatusToEnable(meetingRoomId);
         MeetingRoomModel body = meetingRoomService.updateMeetingRoomStatusToEnable(meetingRoom);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
@@ -69,12 +68,12 @@ public class MeetingRoomController {
 
     }
 
-    @PutMapping("/update-status/disable/{meetingRoomId}")
+    @PutMapping("/updateStatus/disable/{meetingRoomId}")
     public ResponseEntity<ResponseDTO> updateMeetingRoomStatusToDisable(@PathVariable int meetingRoomId){
         log.info("updating meeting room status");
 
-        MeetingRoomModel meetingRoom = meetingRoomValidator.ValidatorUpdateMeetingRoomStatusToDisable(meetingRoomId);
-        MeetingRoomModel body = meetingRoomService.updateStatusMeetingRoom(meetingRoom);
+        MeetingRoomModel meetingRoom = meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(meetingRoomId);
+        MeetingRoomModel body = meetingRoomService.updateMeetingRoomStatusToDisable(meetingRoom);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting room status updated",201,data,null);

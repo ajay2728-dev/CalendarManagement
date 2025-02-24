@@ -1,11 +1,9 @@
 package com.example.calendarManagement.validator;
 
-import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
-import com.example.calendarManagement.model.MeetingModel;
 import com.example.calendarManagement.model.MeetingRoomModel;
 import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.MeetingRoomRepo;
@@ -24,7 +22,7 @@ public class MeetingRoomValidator {
     @Autowired
     private MeetingRoomRepo meetingRoomRepo;
 
-    public OfficeModel ValidatorAddMeetingRoom(MeetingRoomRequestDTO meetingRoom){
+    public OfficeModel validatorAddMeetingRoom(MeetingRoomRequestDTO meetingRoom){
 
         // check missing input
         if(meetingRoom.getRoomName()==null || meetingRoom.getOfficeId()==0){
@@ -50,7 +48,7 @@ public class MeetingRoomValidator {
         return office.get();
     }
 
-    public MeetingRoomModel ValidatorUpdateMeetingRoomStatusToEnable(int meetingRoomId){
+    public MeetingRoomModel validatorUpdateMeetingRoomStatusToEnable(int meetingRoomId){
         //check valid room id
         Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
         if(!exitingRoomOpt.isPresent()){
@@ -65,7 +63,7 @@ public class MeetingRoomValidator {
         return exitingRoomOpt.get();
     }
 
-    public MeetingRoomModel ValidatorUpdateMeetingRoomStatusToDisable(int meetingRoomId){
+    public MeetingRoomModel validatorUpdateMeetingRoomStatusToDisable(int meetingRoomId){
         //check valid room id
         Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
         if(!exitingRoomOpt.isPresent()){
