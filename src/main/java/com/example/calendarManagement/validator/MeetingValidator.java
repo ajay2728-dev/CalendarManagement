@@ -59,18 +59,18 @@ public class MeetingValidator {
         }
 
         // Check if the meeting date is today or a future date
-//        LocalDate today = LocalDate.now();
-//        LocalDate meetingDate = start.toLocalDate();
-//
-//        if (meetingDate.isBefore(today)) {
-//            throw new InvalidFieldException("Meeting date cannot be in the past.");
-//        }
-//
-//        // If the meeting is scheduled for today, ensure the start time is in the future
-//        LocalDateTime now = LocalDateTime.now();
-//        if (meetingDate.isEqual(today) && start.isBefore(now)) {
-//            throw new InvalidFieldException("Meeting cannot be scheduled in the past.");
-//        }
+        LocalDate today = LocalDate.now();
+        LocalDate meetingDate = start.toLocalDate();
+
+        if (meetingDate.isBefore(today)) {
+            throw new InvalidFieldException("Meeting date cannot be in the past.");
+        }
+
+        // If the meeting is scheduled for today, ensure the start time is in the future
+        LocalDateTime now = LocalDateTime.now();
+        if (meetingDate.isEqual(today) && start.isBefore(now)) {
+            throw new InvalidFieldException("Meeting cannot be scheduled in the past.");
+        }
 
         // Check if the difference between startTime and endTime is at least 30 minutes
         Duration duration = Duration.between(start, end);

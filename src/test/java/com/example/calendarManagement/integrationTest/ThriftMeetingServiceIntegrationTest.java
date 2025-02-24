@@ -34,9 +34,9 @@ public class ThriftMeetingServiceIntegrationTest {
     void setup(){
         baseUrl = "http://localhost:" + port + "/api/meeting";
         meetingServiceDTO = new IMeetingServiceDTO();
-        meetingServiceDTO.setStartTime("2025-02-18 13:00");
-        meetingServiceDTO.setEndTime("2025-02-18 14:00");
-        meetingServiceDTO.setEmployeeIDs(new ArrayList<>(Arrays.asList(1, 2,3,4,5,6)));
+        meetingServiceDTO.setStartTime("2025-02-26 13:00");
+        meetingServiceDTO.setEndTime("2025-02-26 14:00");
+        meetingServiceDTO.setEmployeeIDs(new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7)));
 
     }
 
@@ -57,11 +57,11 @@ public class ThriftMeetingServiceIntegrationTest {
         String url = baseUrl+"/schedule";
         meetingServiceDTO.setDescription("on boarding meeting");
         meetingServiceDTO.setAgenda("Check update of intern work");
-        ResponseDTO response = restTemplate.postForObject(baseUrl,meetingServiceDTO, ResponseDTO.class);
+        ResponseDTO response = restTemplate.postForObject(url,meetingServiceDTO, ResponseDTO.class);
 
         assertThat(response).isNotNull();
         assertThat(response.getMessage()).isEqualTo("Meeting scheduled successfully");
-        assertThat(response.getCode()).isEqualTo(200);
+        assertThat(response.getCode()).isEqualTo(201);
         assertThat(response.getError()).isEqualTo(null);
 
     }

@@ -58,7 +58,6 @@ public class ThriftMeetingService {
 
     }
 
-
     public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
             IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
@@ -68,23 +67,5 @@ public class ThriftMeetingService {
         }
     }
 
-//    public CompletableFuture<IMeetingServiceDTO> meetingSchedule(IMeetingServiceDTO meetingServiceDTO) {
-//        log.info("Main Thread: {}", Thread.currentThread().getName());
-//        return CompletableFuture.supplyAsync(() -> {
-//            log.info("Async Execution Thread: {}", Thread.currentThread().getName());
-//            try {
-//                log.info("Calling Thrift server to schedule meeting asynchronously...");
-//                return client.meetingSchedule(meetingServiceDTO);
-//            } catch (MeetingException ex) {
-//                try {
-//                    throw new MeetingException(ex.getMessage(), ex.errorCode);
-//                } catch (MeetingException e) {
-//                    throw new RuntimeException(e);
-//                }
-//            } catch (TException ex) {
-//                throw new RuntimeException("Thrift communication error", ex);
-//            }
-//        }, executor);
-//    }
 
 }

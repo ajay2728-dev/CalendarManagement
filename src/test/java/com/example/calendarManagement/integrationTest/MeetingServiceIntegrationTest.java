@@ -37,12 +37,12 @@ public class MeetingServiceIntegrationTest {
     @BeforeEach
     void setup(){
         baseUrl = "http://localhost:" + port + "/api/meeting";
-        requestDto = new MeetingStatusDTO(4, 1, false);
+        requestDto = new MeetingStatusDTO(2, 2, true);
     }
 
     @Test
     void testUpdateMeetingStatus(){
-        String url = baseUrl+"/update-status";
+        String url = baseUrl+"/employee/update-status";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -69,7 +69,7 @@ public class MeetingServiceIntegrationTest {
     @Test
     void testCancelMeetingById(){
 
-        String url = baseUrl + "/" + 9;
+        String url = baseUrl + "/" + 1;
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
