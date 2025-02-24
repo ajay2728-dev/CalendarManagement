@@ -42,6 +42,11 @@ public class MeetingValidator {
         LocalDateTime start = LocalDateTime.parse(meetingDTO.getStartTime(), formatter);
         LocalDateTime end = LocalDateTime.parse(meetingDTO.getEndTime(), formatter);
 
+        // Ensure startTime and endTime are on the same day
+        if (!start.toLocalDate().isEqual(end.toLocalDate())) {
+            throw new InvalidFieldException("Start time and end time must be on the same day.");
+        }
+
         // Get the LocalTime part from start and end time
         LocalTime startTime = start.toLocalTime();
         LocalTime endTime = end.toLocalTime();

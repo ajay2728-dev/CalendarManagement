@@ -9,6 +9,7 @@ import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.MeetingRoomRepo;
 import com.example.calendarManagement.repository.OfficeRepo;
 import com.example.calendarManagement.service.MeetingRoomService;
+import com.example.calendarManagement.validator.MeetingRoomValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,19 +39,20 @@ public class MeetingRoomServiceTest {
     @Mock
     private OfficeRepo officeRepo;
 
+    @Mock
+    private MeetingRoomValidator meetingRoomValidator;
+
     @BeforeEach
     public void setup(){
         office =  new OfficeModel(1,"Headquarters","New York");
         inputMeetingRoom = new MeetingRoomRequestDTO(0, "Alpha Conference", 1, true);
-        missingInputMeetingRoom = new MeetingRoomRequestDTO(0,null,1,true);
+        missingInputMeetingRoom = new MeetingRoomRequestDTO(0,null,0,true);
         saveMeetingRoom = new MeetingRoomModel(1, "Alpha Conference", office, true);
     }
 
     @Test
     void test_whenAddMeetingRoom_givenValidInput_AddMeetingRoomSuccess()  {
 
-        Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(office));
-        Mockito.when(meetingRoomRepo.countByOffice(office)).thenReturn(8);
         Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
 
         MeetingRoomModel result = meetingRoomService.addMeetingRoom(inputMeetingRoom,office);
@@ -65,7 +67,7 @@ public class MeetingRoomServiceTest {
     void test_whenAddMeetingRoom_givenInvalidOfficeId_ThrowMissingFieldException(){
 
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    meetingRoomService.addMeetingRoom(missingInputMeetingRoom,office);
+            meetingRoomValidator.ValidatorAddMeetingRoom(missingInputMeetingRoom);
                 }
         );
         assertEquals("Missing Required Input",thrownException.getMessage());
