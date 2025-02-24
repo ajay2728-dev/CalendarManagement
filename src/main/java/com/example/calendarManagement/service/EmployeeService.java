@@ -78,7 +78,7 @@ public class EmployeeService {
 
     // method to get all employee
     public List<EmployeeResponseDTO> getAllEmployee() {
-        List<EmployeeModel> activeEmployees = employeeRepo.findAllValidEmployee();
+        List<EmployeeModel> activeEmployees = employeeRepo.findByIsActiveTrue();
         return EmployeeMapper.mapToDTOList(activeEmployees);
     }
 
