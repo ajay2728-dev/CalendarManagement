@@ -114,12 +114,12 @@ public class MeetingRoomServiceTest {
     @Test
     void test_whenUpdateMeetingRoomStatusToEnable_givenValidInput_updateStatusToEnableSuccess(){
 
-        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
         saveMeetingRoom.setEnable(false);
-        MeetingRoomModel result = meetingRoomService.updateMeetingRoomStatusToDisable(saveMeetingRoom);
+        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
+        MeetingRoomResponseDTO result = meetingRoomService.updateMeetingRoomStatusToEnable(saveMeetingRoom);
 
         assertThat(result).isNotNull();
-        assertThat(result.getIsEnable()).isEqualTo(false);
+        assertThat(result.isEnable()).isEqualTo(true);
 
     }
 
@@ -131,7 +131,7 @@ public class MeetingRoomServiceTest {
                 meetingRoomValidator.validatorUpdateMeetingRoomStatusToEnable(1)
         );
 
-        assertEquals("Room Not Found with given meetingId", thrownException.getMessage());
+        assertEquals("Room Not Found with given Id", thrownException.getMessage());
 
     }
 
@@ -147,39 +147,42 @@ public class MeetingRoomServiceTest {
 
     }
 
-//    @Test
-//    void test_whenUpdateMeetingRoomStatusToEnable_WhenRoomAlreadyEnabled_ThrowsConstraintViolationException(){
-//        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
-//
-//        ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class, () ->
-//                meetingRoomValidator.ValidatorUpdateMeetingRoomStatusToEnable(1)
-//        );
-//
-//        assertEquals("Meeting Room already Enable", thrownException.getMessage());
-//
-//    }
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_givenValidInput_updateStatusToDisableSuccess(){
 
-//    @Test
-//    void test_whenUpdateMeetingRoomStatusToEnable_givenMissingInput_ThrowMissingFieldException(){
-//
-//        MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-//                    meetingRoomService.updateStatusMeetingRoom(missingInputMeetingRoom);
-//                }
-//        );
-//        assertEquals("Missing Required Input",thrownException.getMessage());
-//    }
+        saveMeetingRoom.setEnable(true);
+        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
+        MeetingRoomResponseDTO result = meetingRoomService.updateMeetingRoomStatusToDisable(saveMeetingRoom);
 
-//    @Test
-//    void test_whenUpdateMeetingRoomStatus_inValidRoomId_ThrowNotFoundException(){
-//        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
-//
-//        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-//            meetingRoomService.updateStatusMeetingRoom(new MeetingRoomRequestDTO(1, "Alpha Conference", 1, true));
-//        });
-//
-//        assertEquals("Room Not Found",thrownException.getMessage());
-//
-//    }
+        assertThat(result).isNotNull();
+        assertThat(result.isEnable()).isEqualTo(false);
+
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_whenRoomNotFound_throwsNotFoundException(){
+
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(1)
+        );
+
+        assertEquals("Room Not Found with given Id", thrownException.getMessage());
+
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_whenRoomAlreadyDisable_throwsConstraintViolationException(){
+        saveMeetingRoom.setEnable(false);
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
+        ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(1)
+        );
+
+        assertEquals("Meeting Room already Disable", thrownException.getMessage());
+
+    }
+
 
     @Test
     void test_whenGettingRoomById_giveValidRoomId_getRoomSuccess(){

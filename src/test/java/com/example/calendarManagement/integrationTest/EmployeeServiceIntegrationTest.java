@@ -95,7 +95,7 @@ public class EmployeeServiceIntegrationTest {
     void testDeleteEmployeeById(){
 
         String url = baseUrl + "/" + 9;
-        inputEmployee.setActive(false);
+        inputEmployee.setIsActive(false);
         restTemplate.put(url,inputEmployee);
 
 

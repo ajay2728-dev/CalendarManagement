@@ -52,11 +52,11 @@ public class MeetingRoomValidator {
         //check valid room id
         Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
         if(!exitingRoomOpt.isPresent()){
-            throw new NotFoundException("Room Not Found with given meetingId");
+            throw new NotFoundException("Room Not Found with given Id");
         }
 
         // already enable
-        if(exitingRoomOpt.get().getIsEnable()){
+        if(exitingRoomOpt.get().isEnable()){
             throw new ConstraintViolationException("Meeting Room already Enable");
         }
 
@@ -67,11 +67,11 @@ public class MeetingRoomValidator {
         //check valid room id
         Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
         if(!exitingRoomOpt.isPresent()){
-            throw new NotFoundException("Room Not Found with given meetingId");
+            throw new NotFoundException("Room Not Found with given Id");
         }
 
         // already disable
-        if(!exitingRoomOpt.get().getIsEnable()){
+        if(!exitingRoomOpt.get().isEnable()){
             throw new ConstraintViolationException("Meeting Room already Disable");
         }
 

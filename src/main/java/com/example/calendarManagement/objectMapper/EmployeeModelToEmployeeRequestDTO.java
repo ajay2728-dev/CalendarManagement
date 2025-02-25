@@ -9,7 +9,7 @@ public class EmployeeModelToEmployeeRequestDTO {
         return  new EmployeeRequestDTO( employeeModel.getEmployeeId(),employeeModel.getEmployeeName(),
                 employeeModel.getOffice().getOfficeId(),
                 employeeModel.getEmployeeEmail(),
-                employeeModel.getActive(),
+                employeeModel.getIsActive(),
                 employeeModel.getSalary(),
                 employeeModel.getDepartment()
         );

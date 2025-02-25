@@ -39,7 +39,7 @@ public class EmployeeService {
                 employee.getEmployeeEmail(),
                 office,
                 employee.getDepartment(),
-                employee.getActive(),
+                employee.getIsActive(),
                 employee.getSalary()
         );
 
@@ -64,7 +64,7 @@ public class EmployeeService {
             throw new NotFoundException("No employee exists with the given ID.");
         }
 
-        if(!employeeOpt.get().getActive()){
+        if(!employeeOpt.get().getIsActive()){
             throw new NotFoundException("Employee no longer work here.");
         }
 
@@ -86,13 +86,9 @@ public class EmployeeService {
     public EmployeeModel deleteEmployeeById( EmployeeModel validEmployee) throws Exception {
 
         // delete employee
-        validEmployee.setActive(false);
-        try {
-            employeeRepo.save(validEmployee);
-            return validEmployee;
-        } catch (RuntimeException ex){
-            throw new RuntimeException("An error occurred while deleting the employee: " + ex.getMessage());
-        }
+        validEmployee.setIsActive(false);
+        employeeRepo.save(validEmployee);
+        return validEmployee;
 
     }
 }

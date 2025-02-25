@@ -11,7 +11,7 @@ public class EmployeeModelToEmployeeResponseDTO {
                 employeeModel.getOffice().getOfficeId(),
                 employeeModel.getEmployeeEmail(),
                 employeeModel.getSalary(),
-                employeeModel.getActive(),
+                employeeModel.getIsActive(),
                 employeeModel.getDepartment()
         );
     }

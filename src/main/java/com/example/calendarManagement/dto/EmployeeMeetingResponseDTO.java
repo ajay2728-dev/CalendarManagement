@@ -1,5 +1,12 @@
 package com.example.calendarManagement.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class EmployeeMeetingResponseDTO {
     private int meetingId;
     private String description;
@@ -17,55 +24,4 @@ public class EmployeeMeetingResponseDTO {
         this.roomId = roomId;
     }
 
-    public EmployeeMeetingResponseDTO(){
-
-    }
-
-    public int getMeetingId() {
-        return meetingId;
-    }
-
-    public void setMeetingId(int meetingId) {
-        this.meetingId = meetingId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAgenda() {
-        return agenda;
-    }
-
-    public void setAgenda(String agenda) {
-        this.agenda = agenda;
-    }
-
-    public String getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
-    public String getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
 }

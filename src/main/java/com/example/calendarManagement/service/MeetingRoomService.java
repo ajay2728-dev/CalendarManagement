@@ -40,7 +40,7 @@ public class MeetingRoomService {
         MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(updateMeetingRoom.getRoomId(),
                 updateMeetingRoom.getRoomName(),
                 updateMeetingRoom.getOffice().getOfficeId(),
-                updateMeetingRoom.getIsEnable());
+                updateMeetingRoom.isEnable());
         return existingRoom;
 
     }
@@ -52,7 +52,7 @@ public class MeetingRoomService {
         MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(updateMeetingRoom.getRoomId(),
                 updateMeetingRoom.getRoomName(),
                 updateMeetingRoom.getOffice().getOfficeId(),
-                updateMeetingRoom.getIsEnable());
+                updateMeetingRoom.isEnable());
 
         return existingRoom;
     }
@@ -67,7 +67,7 @@ public class MeetingRoomService {
         MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(meetingRoomOpt.get().getRoomId(),
                                                                  meetingRoomOpt.get().getRoomName(),
                                                                  meetingRoomOpt.get().getOffice().getOfficeId(),
-                                                                 meetingRoomOpt.get().getIsEnable());
+                                                                 meetingRoomOpt.get().isEnable());
         return existingRoom;
     }
 }

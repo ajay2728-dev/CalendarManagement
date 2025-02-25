@@ -1,10 +1,19 @@
 package com.example.calendarManagement.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MeetingModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,19 +42,6 @@ public class MeetingModel {
     @OneToMany(mappedBy = "meeting", cascade = CascadeType.ALL)
     private List<EmployeeMeetingStatusModel> statuses;
 
-    public MeetingModel(){
-
-    }
-
-    public MeetingModel( String description, String agenda, MeetingRoomModel meetingRoom, LocalDateTime startTime, LocalDateTime endTime, Boolean isValid) {
-        this.description = description;
-        this.agenda = agenda;
-        this.meetingRoom = meetingRoom;
-        this.startTime = startTime;
-        this.endTime = endTime;
-        this.isValid = isValid;
-    }
-
     public MeetingModel(int meetingId, String description, String agenda, MeetingRoomModel meetingRoom, LocalDateTime startTime, LocalDateTime endTime, Boolean isValid) {
         this.meetingId = meetingId;
         this.description = description;
@@ -56,67 +52,4 @@ public class MeetingModel {
         this.isValid = isValid;
     }
 
-    public int getMeetingId() {
-        return meetingId;
-    }
-
-    public void setMeetingId(int meetingId) {
-        this.meetingId = meetingId;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getAgenda() {
-        return agenda;
-    }
-
-    public void setAgenda(String agenda) {
-        this.agenda = agenda;
-    }
-
-    public MeetingRoomModel getMeetingRoom() {
-        return meetingRoom;
-    }
-
-    public void setMeetingRoom(MeetingRoomModel meetingRoom) {
-        this.meetingRoom = meetingRoom;
-    }
-
-    public LocalDateTime getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(LocalDateTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public Boolean getValid() {
-        return isValid;
-    }
-
-    public void setValid(Boolean valid) {
-        isValid = valid;
-    }
-
-    public LocalDateTime getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(LocalDateTime endTime) {
-        this.endTime = endTime;
-    }
-
-    public List<EmployeeMeetingStatusModel> getStatuses() {
-        return statuses;
-    }
-
-    public void setStatuses(List<EmployeeMeetingStatusModel> statuses) {
-        this.statuses = statuses;
-    }
 }

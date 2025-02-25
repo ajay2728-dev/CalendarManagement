@@ -1,9 +1,17 @@
 package com.example.calendarManagement.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
-import java.util.Set;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class EmployeeMeetingStatusModel {
 
     @Id
@@ -27,42 +35,6 @@ public class EmployeeMeetingStatusModel {
         this.meeting = meeting;
         this.meetingStatus = meetingStatus;
         this.employee = employee;
-    }
-
-    public EmployeeMeetingStatusModel(){
-
-    }
-
-    public MeetingModel getMeeting() {
-        return meeting;
-    }
-
-    public void setMeeting(MeetingModel meeting) {
-        this.meeting = meeting;
-    }
-
-    public Boolean getMeetingStatus() {
-        return meetingStatus;
-    }
-
-    public void setMeetingStatus(Boolean meetingStatus) {
-        this.meetingStatus = meetingStatus;
-    }
-
-    public EmployeeModel getEmployee() {
-        return employee;
-    }
-
-    public void setEmployee(EmployeeModel employee) {
-        this.employee = employee;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
 }

@@ -7,6 +7,7 @@ import com.example.calendarManagement.model.EmployeeModel;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 public class EmployeeMapper {
 
     public static EmployeeResponseDTO mapToDTO(EmployeeModel employeeModel) {
@@ -16,7 +17,7 @@ public class EmployeeMapper {
                 employeeModel.getOffice().getOfficeId(),
                 employeeModel.getEmployeeEmail(),
                 employeeModel.getSalary(),
-                employeeModel.getActive(),
+                employeeModel.getIsActive(),
                 employeeModel.getDepartment()
         );
     }

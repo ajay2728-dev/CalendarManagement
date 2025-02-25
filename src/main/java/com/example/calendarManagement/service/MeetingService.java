@@ -5,7 +5,6 @@ import com.example.calendarManagement.dto.CancelMeetingResponseDTO;
 import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
-import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -38,10 +37,13 @@ public class MeetingService {
     @Autowired
     private MeetingRepo meetingRepo;
 
+    @Autowired
+    private MeetingModelTOMeetingResponseDTO meetingResponseDTO;
+
     public MeetingStatusDTO updateEmployeeMeetingStatus(MeetingStatusDTO meetingStatusDTO, EmployeeMeetingStatusModel employeeMeetingStatus) {
 
         // update meeting status
-        employeeMeetingStatus.setMeetingStatus(meetingStatusDTO.isStatus());
+        employeeMeetingStatus.setMeetingStatus(meetingStatusDTO.getMeetingStatus());
         employeeMeetingStatusRepo.save(employeeMeetingStatus);
 
         // return meeting status
@@ -60,12 +62,12 @@ public class MeetingService {
             throw  new NotFoundException("meeting not found with given meetingId");
         }
 
-        if(!meetingOpt.get().getValid()){
+        if(!meetingOpt.get().getIsValid()){
             throw new InvalidFieldException("Given Meeting is Cancel.");
         }
 
         MeetingModel meeting = meetingOpt.get();
-        MeetingResponseDTO response = MeetingModelTOMeetingResponseDTO.map(meeting);
+        MeetingResponseDTO response = meetingResponseDTO.map(meeting);
 
         // return the meeting
         return response;
@@ -80,13 +82,13 @@ public class MeetingService {
             throw new NotFoundException("Meeting not found with given id " + meetingId);
         }
 
-        if(!meetingModelOpt.get().getValid()){
-            throw new InvalidFieldException("Given Meeting is Cancel.");
+        if(!meetingModelOpt.get().getIsValid()){
+            throw new InvalidFieldException("Given Meeting is already Cancel.");
         }
 
         MeetingModel existingMeeting = meetingModelOpt.get();
         employeeMeetingStatusRepo.updateMeetingStatusToFalse(meetingId);
-        existingMeeting.setValid(false);
+        existingMeeting.setIsValid(false);
         meetingRepo.save(existingMeeting);
 
         CancelMeetingResponseDTO response = new CancelMeetingResponseDTO(meetingId,false);

@@ -2,11 +2,14 @@ package com.example.calendarManagement.objectMapper;
 
 import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.model.MeetingModel;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 import java.util.stream.Collectors;
 
+@Component
 public class MeetingModelTOMeetingResponseDTO {
-    public static MeetingResponseDTO map(MeetingModel meetingModel){
+    public MeetingResponseDTO map(MeetingModel meetingModel){
         return new MeetingResponseDTO(
                 meetingModel.getMeetingId(),
                 meetingModel.getDescription(),

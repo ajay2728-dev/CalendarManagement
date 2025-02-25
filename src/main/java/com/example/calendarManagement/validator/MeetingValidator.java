@@ -29,7 +29,7 @@ public class MeetingValidator {
 
         // check missing input
         if( meetingDTO.getEmployeeIDs().size()==0 || meetingDTO.getStartTime()==null || meetingDTO.getEndTime()==null ){
-            throw new MissingFieldException(" Missing employeeIDs or startTime or endTime ");
+            throw new MissingFieldException("Missing employeeIDs or startTime or endTime.");
         }
 
         // number of employee if less 6
@@ -79,7 +79,7 @@ public class MeetingValidator {
 
     public EmployeeMeetingStatusModel updateEmployeeMeetingStatusValidator (MeetingStatusDTO meetingStatusDTO){
         // validation check
-        if(meetingStatusDTO.getMeetingId()==0 || meetingStatusDTO.getEmployeeId()==0 || meetingStatusDTO.isStatus()==null){
+        if(meetingStatusDTO.getMeetingId()==0 || meetingStatusDTO.getEmployeeId()==0 || meetingStatusDTO.getMeetingStatus()==null){
             throw new MissingFieldException("Input Field for update meeting status is missing");
         }
 
@@ -95,9 +95,9 @@ public class MeetingValidator {
 
         EmployeeMeetingStatusModel existingMeetingStatus = exitingMeetingStatusOpt.get();
 
-        String status = meetingStatusDTO.isStatus() ? "Accepted" : "Rejected";
+        String status = meetingStatusDTO.getMeetingStatus() ? "Accepted" : "Rejected";
 
-        if(existingMeetingStatus.getMeetingStatus() == meetingStatusDTO.isStatus()){
+        if(existingMeetingStatus.getMeetingStatus() == meetingStatusDTO.getMeetingStatus()){
             throw new ConstraintViolationException("Employee already "+ status +" the meeting.");
         }
 

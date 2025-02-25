@@ -1,26 +1,19 @@
 package com.example.calendarManagement.service;
 
-import com.example.calendarManagement.dto.MeetingStatusDTO;
-import com.example.calendarManagement.exception.ThriftServerException;
-import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
-import com.example.thriftMeeting.IMeetingServiceResponse;
 import com.example.thriftMeeting.MeetingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 @Slf4j
 @Service

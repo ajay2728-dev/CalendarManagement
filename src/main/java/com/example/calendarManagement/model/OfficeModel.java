@@ -1,6 +1,8 @@
 package com.example.calendarManagement.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +12,8 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class OfficeModel {
 
     @Id
@@ -29,18 +33,10 @@ public class OfficeModel {
     @OneToMany(mappedBy = "office", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EmployeeModel> employees = new ArrayList<>();
 
-    public OfficeModel(){
-
-    }
-
     public OfficeModel(int officeId, String officeName, String officeLocation) {
         this.officeId = officeId;
         this.officeName = officeName;
         this.officeLocation = officeLocation;
-    }
-
-    public int getOfficeId() {
-        return officeId;
     }
 
 }
