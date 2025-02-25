@@ -1,6 +1,8 @@
 package com.example.calendarManagement.controller;
 
+import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
+import com.example.calendarManagement.dto.MeetingRoomResponseDTO;
 import com.example.calendarManagement.dto.ResponseDTO;
 import com.example.calendarManagement.model.MeetingRoomModel;
 import com.example.calendarManagement.model.OfficeModel;
@@ -46,7 +48,7 @@ public class MeetingRoomController {
     public ResponseEntity<ResponseDTO> getMeetingRoomById(@PathVariable int meetingRoomId ){
         log.info("getting meeting room by id controller ...");
 
-        MeetingRoomModel body = meetingRoomService.getMeetingRoomById(meetingRoomId);
+        MeetingRoomResponseDTO body = meetingRoomService.getMeetingRoomById(meetingRoomId);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO response = new ResponseDTO("Meeting room detail retrieved successfully",200,data,null);
@@ -59,7 +61,7 @@ public class MeetingRoomController {
         log.info("updating meeting room status to enable controller ...");
 
         MeetingRoomModel meetingRoom = meetingRoomValidator.validatorUpdateMeetingRoomStatusToEnable(meetingRoomId);
-        MeetingRoomModel body = meetingRoomService.updateMeetingRoomStatusToEnable(meetingRoom);
+        MeetingRoomResponseDTO body = meetingRoomService.updateMeetingRoomStatusToEnable(meetingRoom);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting room status updated",201,data,null);
@@ -73,7 +75,7 @@ public class MeetingRoomController {
         log.info("updating meeting room status");
 
         MeetingRoomModel meetingRoom = meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(meetingRoomId);
-        MeetingRoomModel body = meetingRoomService.updateMeetingRoomStatusToDisable(meetingRoom);
+        MeetingRoomResponseDTO body = meetingRoomService.updateMeetingRoomStatusToDisable(meetingRoom);
         Map<String, Object> data = new HashMap<>();
         data.put("body",body);
         ResponseDTO responseBody = new ResponseDTO("Meeting room status updated",201,data,null);

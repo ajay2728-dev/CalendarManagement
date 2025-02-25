@@ -42,7 +42,7 @@ public class ThriftMeetingServiceIntegrationTest {
 
     @Test
     void testCanScheduleMeeting(){
-        String url = baseUrl+"/can-schedule";
+        String url = baseUrl+"/canSchedule";
         ResponseDTO response = restTemplate.postForObject(url,meetingServiceDTO,ResponseDTO.class);
 
         assertThat(response).isNotNull();

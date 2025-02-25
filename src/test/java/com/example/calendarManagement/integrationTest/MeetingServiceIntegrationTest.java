@@ -42,7 +42,7 @@ public class MeetingServiceIntegrationTest {
 
     @Test
     void testUpdateMeetingStatus(){
-        String url = baseUrl+"/employee/update-status";
+        String url = baseUrl+"/employee/updateStatus";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -90,7 +90,6 @@ public class MeetingServiceIntegrationTest {
         assertThat(response.getMessage()).isEqualTo("Meetings retrieved successfully");
         assertThat(response.getCode()).isEqualTo(200);
         assertThat(response.getError()).isEqualTo(null);
-
 
     }
 

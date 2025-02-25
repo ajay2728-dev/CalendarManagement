@@ -6,6 +6,7 @@ import com.example.calendarManagement.dto.EmployeeMeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingStatusDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
+import com.example.calendarManagement.exception.InvalidFieldException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
 import com.example.calendarManagement.model.MeetingModel;
@@ -59,6 +60,10 @@ public class MeetingService {
             throw  new NotFoundException("meeting not found with given meetingId");
         }
 
+        if(!meetingOpt.get().getValid()){
+            throw new InvalidFieldException("Given Meeting is Cancel.");
+        }
+
         MeetingModel meeting = meetingOpt.get();
         MeetingResponseDTO response = MeetingModelTOMeetingResponseDTO.map(meeting);
 
@@ -69,9 +74,14 @@ public class MeetingService {
     @Transactional
     public CancelMeetingResponseDTO cancelMeetingById(int meetingId) {
         // check valid meeting id
-        Optional<MeetingModel> meetingModelOpt = meetingRepo.findByMeetingIdAndIsValidTrue(meetingId);
+        Optional<MeetingModel> meetingModelOpt = meetingRepo.findById(meetingId);
+
         if(!meetingModelOpt.isPresent()){
             throw new NotFoundException("Meeting not found with given id " + meetingId);
+        }
+
+        if(!meetingModelOpt.get().getValid()){
+            throw new InvalidFieldException("Given Meeting is Cancel.");
         }
 
         MeetingModel existingMeeting = meetingModelOpt.get();

@@ -39,8 +39,8 @@ public class EmployeeServiceIntegrationTest {
     void setup(){
         baseUrl = "http://localhost:" + port + "/api/employee";
 
-        inputEmployee=new EmployeeRequestDTO(0, "Jay ", 1,
-                "jay@xyz.com", true, 50000, "Engineering");
+        inputEmployee=new EmployeeRequestDTO(0, "rahul ", 1,
+                "rahul12221@xyz.com", true, 50000, "Engineering");
     }
 
     @Test
@@ -94,7 +94,7 @@ public class EmployeeServiceIntegrationTest {
     @Test
     void testDeleteEmployeeById(){
 
-        String url = baseUrl + "/" + 2;
+        String url = baseUrl + "/" + 9;
         inputEmployee.setActive(false);
         restTemplate.put(url,inputEmployee);
 

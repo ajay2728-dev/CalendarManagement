@@ -1,6 +1,7 @@
 package com.example.calendarManagement.unitTest;
 
 import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
+import com.example.calendarManagement.dto.MeetingRoomResponseDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -184,7 +185,7 @@ public class MeetingRoomServiceTest {
     void test_whenGettingRoomById_giveValidRoomId_getRoomSuccess(){
         Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
 
-        MeetingRoomModel result = meetingRoomService.getMeetingRoomById(1);
+        MeetingRoomResponseDTO result = meetingRoomService.getMeetingRoomById(1);
 
         assertThat(result).isNotNull();
         assertThat(result.getRoomId()).isEqualTo(1);

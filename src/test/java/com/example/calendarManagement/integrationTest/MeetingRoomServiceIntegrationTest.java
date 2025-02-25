@@ -30,8 +30,8 @@ public class MeetingRoomServiceIntegrationTest {
 
     @BeforeEach
     void setup(){
-        baseUrl = "http://localhost:" + port + "/api/meeting-room";
-        inputMeetingRoom = new MeetingRoomRequestDTO(0, "AC", 1, true);
+        baseUrl = "http://localhost:" + port + "/api/meetingRoom";
+        inputMeetingRoom = new MeetingRoomRequestDTO(0, "AZ", 1, true);
         saveMeetingRoom = new MeetingRoomRequestDTO(1,"Alpha Conference", 1, true);
         updatedMeetingRoom = new MeetingRoomRequestDTO(1,"Alpha Conference", 1, false);
     }
@@ -47,8 +47,8 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void testEnableMeetingRoomStatus(){
-        String url = baseUrl + "/update-status/enable"+"/"+1;
+    void testDisableMeetingRoomStatus(){
+        String url = baseUrl + "/updateStatus/disable"+"/"+1;
         saveMeetingRoom.setEnable(false);
         restTemplate.put(url,saveMeetingRoom);
 
@@ -62,8 +62,8 @@ public class MeetingRoomServiceIntegrationTest {
     }
 
     @Test
-    void testDisableMeetingRoomStatus(){
-        String url = baseUrl + "/update-status/disable"+"/"+1;
+    void testEnableMeetingRoomStatus(){
+        String url = baseUrl + "/updateStatus/enable"+"/"+1;
         saveMeetingRoom.setEnable(false);
         restTemplate.put(url,saveMeetingRoom);
 
@@ -75,6 +75,8 @@ public class MeetingRoomServiceIntegrationTest {
         assertThat(response.getError()).isEqualTo(null);
 
     }
+
+
 
     @Test
     void testGettingMeetingRoomById(){

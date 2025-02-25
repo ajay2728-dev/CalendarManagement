@@ -200,7 +200,7 @@ public class EmployeeServiceTest {
 
     @Test
     public void test_WhenGetAllEmployee_retrievedSuccess(){
-        Mockito.when(employeeRepo.findAllValidEmployee()).thenReturn(mockEmployees);
+        Mockito.when(employeeRepo.findByIsActiveTrue()).thenReturn(mockEmployees);
 
         List<EmployeeResponseDTO> result = employeeService.getAllEmployee();
 

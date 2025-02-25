@@ -1,10 +1,15 @@
 package com.example.calendarManagement.model;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class OfficeModel {
 
     @Id
@@ -36,26 +41,6 @@ public class OfficeModel {
 
     public int getOfficeId() {
         return officeId;
-    }
-
-    public void setOfficeId(int officeId) {
-        this.officeId = officeId;
-    }
-
-    public String getOfficeName() {
-        return officeName;
-    }
-
-    public void setOfficeName(String officeName) {
-        this.officeName = officeName;
-    }
-
-    public String getOfficeLocation() {
-        return officeLocation;
-    }
-
-    public void setOfficeLocation(String officeLocation) {
-        this.officeLocation = officeLocation;
     }
 
 }
