@@ -1,5 +1,12 @@
 package com.example.calendarManagement.dto;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
 public class CancelMeetingResponseDTO {
     private int meetingId;
     private Boolean status;
@@ -9,19 +16,4 @@ public class CancelMeetingResponseDTO {
         this.status = status;
     }
 
-    public int getMeetingId() {
-        return meetingId;
-    }
-
-    public void setMeetingId(int meetingId) {
-        this.meetingId = meetingId;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
-    }
 }

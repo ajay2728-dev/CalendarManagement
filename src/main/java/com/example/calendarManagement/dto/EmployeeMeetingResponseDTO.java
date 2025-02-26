@@ -1,24 +1,16 @@
 package com.example.calendarManagement.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.AllArgsConstructor;
-
-import java.util.List;
+import lombok.Getter;
 
 @Getter
-@Setter
 @AllArgsConstructor
-@NoArgsConstructor
-public class MeetingRequestDTO {
+public class EmployeeMeetingResponseDTO {
     private int meetingId;
-    private String  description;
+    private String description;
     private String agenda;
-    private List<Integer> employeeIDs;
     private String startTime;
     private  String endTime;
     private int roomId;
-
 
 }

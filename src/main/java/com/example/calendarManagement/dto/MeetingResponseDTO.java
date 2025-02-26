@@ -5,13 +5,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MeetingStatusDTO {
-
+public class MeetingResponseDTO {
     private int meetingId;
-    private int employeeId;
-    private Boolean meetingStatus;
+    private String  description;
+    private String agenda;
+    private List<Integer> employeeIDs;
+    private String startTime;
+    private  String endTime;
+    private int roomId;
+
 }

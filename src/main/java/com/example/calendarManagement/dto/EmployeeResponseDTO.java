@@ -1,13 +1,16 @@
 package com.example.calendarManagement.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@AllArgsConstructor
 @NoArgsConstructor
-public class EmployeeRequestDTO {
+public class EmployeeResponseDTO {
+
     private int employeeId;
     private String employeeName;
     private int officeId;
@@ -16,13 +19,13 @@ public class EmployeeRequestDTO {
     private int salary;
     private String department;
 
-    public EmployeeRequestDTO(int employeeId, String employeeName, int officeId, String employeeEmail, Boolean isActive, int salary, String department) {
+    public EmployeeResponseDTO(int employeeId, String employeeName, int officeId, String employeeEmail, int salary, Boolean isActive, String department) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
         this.officeId = officeId;
         this.employeeEmail = employeeEmail;
-        this.isActive = isActive;
         this.salary = salary;
+        this.isActive = isActive;
         this.department = department;
     }
 

@@ -1,18 +1,16 @@
 package com.example.calendarManagement.service;
 
-import com.example.calendarManagement.dto.MeetingStatusDTO;
-import com.example.calendarManagement.exception.ThriftServerException;
-import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
-import com.example.thriftMeeting.IMeetingServiceResponse;
+import com.example.thriftMeeting.MeetingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,9 +19,8 @@ import java.util.Map;
 @Service
 public class ThriftMeetingService {
     private final IMeetingService.Client client;
+    private final ExecutorService executor = Executors.newCachedThreadPool();
 
-    @Autowired
-    private MeetingValidator meetingValidator;
 
     public ThriftMeetingService(){
         try {
@@ -37,40 +34,30 @@ public class ThriftMeetingService {
         }
     }
 
-
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
-            meetingValidator.canScheduleValidator(meetingServiceDTO);
-            IMeetingServiceResponse response = client.canScheduleMeeting(meetingServiceDTO);
-
-            if(response.getCode()!=200){
-                throw new ThriftServerException(response.getMessage(),response.getCode());
-            }
+            log.info("making an can schedule call to thrift server ...");
+            boolean response = client.canScheduleMeeting(meetingServiceDTO);
+            log.info("response is come from thrift server ...");
 
             Map<String, Object> data = new HashMap<>();
-            data.put("canSchedule",true);
+            data.put("canSchedule",response);
             return data;
-        } catch (TException ex){
-            throw new TException(ex.getMessage());
+
+        } catch (MeetingException ex){
+            throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
 
     }
-
 
     public IMeetingServiceDTO meetingSchedule(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
-            meetingValidator.meetingScheduleValidator(meetingServiceDTO);
-            IMeetingServiceResponse response = client.meetingSchedule(meetingServiceDTO);
-
-            if(response.getCode()!=200){
-                throw new ThriftServerException(response.getMessage(),response.getCode());
-            }
-
-            return response.getData();
-
-        } catch (TException ex){
-            throw new TException(ex.getMessage());
+            IMeetingServiceDTO response = client.meetingSchedule(meetingServiceDTO);
+            return response;
+        } catch (MeetingException ex){
+            throw new MeetingException(ex.getMessage(), ex.errorCode);
         }
     }
+
 
 }

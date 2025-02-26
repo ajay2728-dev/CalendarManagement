@@ -1,31 +1,37 @@
 package com.example.calendarManagement.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class MeetingRoomModel {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "roomId")
     private int roomId;
 
-    @Column(name = "roomName", unique = true)
+    @Column(name = "roomName", unique = true, nullable = false)
     private String roomName;
 
     @ManyToOne
-    @JoinColumn(name = "office_id")
+    @JoinColumn(name = "office_id", nullable = false)
     private OfficeModel office;
 
-    @Column(name = "isEnable")
+    @Column(name = "isEnable", nullable = false)
     private boolean isEnable;
 
     @OneToMany(mappedBy = "meetingRoom", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MeetingModel> meetings;
-
-    public MeetingRoomModel(){
-
-    }
 
     public MeetingRoomModel(int roomId, String roomName, OfficeModel office, boolean isEnable) {
         this.roomId = roomId;
@@ -34,35 +40,10 @@ public class MeetingRoomModel {
         this.isEnable = isEnable;
     }
 
-    public int getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
-    }
-
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
+    public MeetingRoomModel(String roomName, OfficeModel office, boolean isEnable) {
         this.roomName = roomName;
-    }
-
-    public OfficeModel getOffice() {
-        return office;
-    }
-
-    public void setOffice(OfficeModel office) {
         this.office = office;
+        this.isEnable = isEnable;
     }
 
-    public boolean getiIsEnable() {
-        return isEnable;
-    }
-
-    public void setEnable(boolean enable) {
-        isEnable = enable;
-    }
 }

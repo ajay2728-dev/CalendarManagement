@@ -12,7 +12,8 @@ import java.util.Optional;
 public interface EmployeeRepo extends JpaRepository<EmployeeModel,Integer> {
     Optional<EmployeeModel> findByEmployeeEmail(String employeeEmail);
 
-    @Query(value = "SELECT * FROM employee_model em WHERE em.is_active = True", nativeQuery = true)
-    List<EmployeeModel> findAllValidEmployee();
+//    @Query(value = "SELECT * FROM employee_model em WHERE em.is_active = True", nativeQuery = true)
+//    List<EmployeeModel> findAllValidEmployee();
+      List<EmployeeModel> findByIsActiveTrue();
 
 }

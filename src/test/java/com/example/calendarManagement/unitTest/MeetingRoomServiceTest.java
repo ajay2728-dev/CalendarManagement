@@ -1,6 +1,7 @@
 package com.example.calendarManagement.unitTest;
 
 import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
+import com.example.calendarManagement.dto.MeetingRoomResponseDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -9,6 +10,7 @@ import com.example.calendarManagement.model.OfficeModel;
 import com.example.calendarManagement.repository.MeetingRoomRepo;
 import com.example.calendarManagement.repository.OfficeRepo;
 import com.example.calendarManagement.service.MeetingRoomService;
+import com.example.calendarManagement.validator.MeetingRoomValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,22 +40,23 @@ public class MeetingRoomServiceTest {
     @Mock
     private OfficeRepo officeRepo;
 
+    @InjectMocks
+    private MeetingRoomValidator meetingRoomValidator;
+
     @BeforeEach
     public void setup(){
         office =  new OfficeModel(1,"Headquarters","New York");
         inputMeetingRoom = new MeetingRoomRequestDTO(0, "Alpha Conference", 1, true);
-        missingInputMeetingRoom = new MeetingRoomRequestDTO(0,null,1,true);
+        missingInputMeetingRoom = new MeetingRoomRequestDTO(0,null,0,true);
         saveMeetingRoom = new MeetingRoomModel(1, "Alpha Conference", office, true);
     }
 
     @Test
-    void test_whenAddMeetingRoom_givenValidInput_AddMeetingRoomSuccess()  {
+    void test_whenAddMeetingRoom_givenValidInput_addMeetingRoomSuccess()  {
 
-        Mockito.when(officeRepo.findById(1)).thenReturn(Optional.of(office));
-        Mockito.when(meetingRoomRepo.countByOffice(office)).thenReturn(8);
         Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
 
-        MeetingRoomModel result = meetingRoomService.addMeetingRoom(inputMeetingRoom);
+        MeetingRoomModel result = meetingRoomService.addMeetingRoom(inputMeetingRoom,office);
 
         assertThat(result).isNotNull();
         assertThat(result.getOffice()).isEqualTo(office);
@@ -62,10 +65,10 @@ public class MeetingRoomServiceTest {
     }
 
     @Test
-    void test_whenAddMeetingRoom_givenInvalidOfficeId_ThrowMissingFieldException(){
+    void test_whenAddMeetingRoom_givenInvalidOfficeId_throwMissingFieldException(){
 
         MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    meetingRoomService.addMeetingRoom(missingInputMeetingRoom);
+            meetingRoomValidator.validatorAddMeetingRoom(missingInputMeetingRoom);
                 }
         );
         assertEquals("Missing Required Input",thrownException.getMessage());
@@ -73,81 +76,135 @@ public class MeetingRoomServiceTest {
     }
 
     @Test
-    void test_whenAddMeetingRoom_givenValidInput_ThrowNotFoundException(){
+    void test_whenAddMeetingRoom_givenValidInput_throwNotFoundException(){
 
         Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-            meetingRoomService.addMeetingRoom(inputMeetingRoom);
+            meetingRoomValidator.validatorAddMeetingRoom(inputMeetingRoom);
         });
+
+        assertEquals("provided office not found",thrownException.getMessage());
     }
 
     @Test
-    void test_whenAddMeetingRoom_WhenRoomLimitExceeded_ThrowConstraintViolationException(){
+    void test_validatorAddMeetingRoom_whenRoomNameAlreadyExists_throwsConstraintViolationException() {
+        Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(new OfficeModel()));
+        Mockito.when(meetingRoomRepo.findByRoomName(Mockito.anyString())).thenReturn(Optional.of(new MeetingRoomModel()));
+
+        ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class, () ->
+                meetingRoomValidator.validatorAddMeetingRoom(inputMeetingRoom)
+        );
+
+        assertEquals("Give Different Room Name", thrownException.getMessage());
+    }
+
+    @Test
+    void test_whenAddMeetingRoom_whenRoomLimitExceeded_throwConstraintViolationException(){
         Mockito.when(officeRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(office));
         Mockito.when(meetingRoomRepo.countByOffice(office)).thenReturn(10);
 
         ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class,()->{
-            meetingRoomService.addMeetingRoom(inputMeetingRoom);
+            meetingRoomValidator.validatorAddMeetingRoom(inputMeetingRoom);
         });
+
+        assertEquals("Office Already have 10 meeting room",thrownException.getMessage());
     }
 
     @Test
-    void test_whenUpdateMeetingRoomStatus_givenValidInput_updateStatusSuccess(){
+    void test_whenUpdateMeetingRoomStatusToEnable_givenValidInput_updateStatusToEnableSuccess(){
 
-        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
-        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(new MeetingRoomModel(1, "Alpha Conference", office, false));
-
-        MeetingRoomModel result = meetingRoomService.updateStatusMeetingRoom(new MeetingRoomRequestDTO(1, "Alpha Conference", 1, true));
+        saveMeetingRoom.setEnable(false);
+        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
+        MeetingRoomResponseDTO result = meetingRoomService.updateMeetingRoomStatusToEnable(saveMeetingRoom);
 
         assertThat(result).isNotNull();
-        assertThat(result.getiIsEnable()).isEqualTo(false);
+        assertThat(result.isEnable()).isEqualTo(true);
+
     }
 
     @Test
-    void test_whenUpdateMeetingRoomStatus_givenMissingInput_ThrowMissingFieldException(){
+    void test_whenUpdateMeetingRoomStatusToEnable_whenRoomNotFound_throwsNotFoundException(){
 
-        MissingFieldException thrownException = assertThrows(MissingFieldException.class,()->{
-                    meetingRoomService.updateStatusMeetingRoom(missingInputMeetingRoom);
-                }
-        );
-        assertEquals("Missing Required Input",thrownException.getMessage());
-    }
-
-    @Test
-    void test_whenUpdateMeetingRoomStatus_inValidRoomId_ThrowNotFoundException(){
         Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToEnable(1)
+        );
 
-        NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-            meetingRoomService.updateStatusMeetingRoom(new MeetingRoomRequestDTO(1, "Alpha Conference", 1, true));
-        });
-
-        assertEquals("Room Not Found",thrownException.getMessage());
+        assertEquals("Room Not Found with given Id", thrownException.getMessage());
 
     }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToEnable_whenRoomAlreadyEnabled_throwsConstraintViolationException(){
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
+
+        ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToEnable(1)
+        );
+
+        assertEquals("Meeting Room already Enable", thrownException.getMessage());
+
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_givenValidInput_updateStatusToDisableSuccess(){
+
+        saveMeetingRoom.setEnable(true);
+        Mockito.when(meetingRoomRepo.save(Mockito.any(MeetingRoomModel.class))).thenReturn(saveMeetingRoom);
+        MeetingRoomResponseDTO result = meetingRoomService.updateMeetingRoomStatusToDisable(saveMeetingRoom);
+
+        assertThat(result).isNotNull();
+        assertThat(result.isEnable()).isEqualTo(false);
+
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_whenRoomNotFound_throwsNotFoundException(){
+
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
+        NotFoundException thrownException = assertThrows(NotFoundException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(1)
+        );
+
+        assertEquals("Room Not Found with given Id", thrownException.getMessage());
+
+    }
+
+    @Test
+    void test_whenUpdateMeetingRoomStatusToDisable_whenRoomAlreadyDisable_throwsConstraintViolationException(){
+        saveMeetingRoom.setEnable(false);
+        Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
+        ConstraintViolationException thrownException = assertThrows(ConstraintViolationException.class, () ->
+                meetingRoomValidator.validatorUpdateMeetingRoomStatusToDisable(1)
+        );
+
+        assertEquals("Meeting Room already Disable", thrownException.getMessage());
+
+    }
+
 
     @Test
     void test_whenGettingRoomById_giveValidRoomId_getRoomSuccess(){
         Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.of(saveMeetingRoom));
 
-        MeetingRoomModel result = meetingRoomService.getMeetingRoomId(1);
+        MeetingRoomResponseDTO result = meetingRoomService.getMeetingRoomById(1);
 
         assertThat(result).isNotNull();
         assertThat(result.getRoomId()).isEqualTo(1);
     }
 
     @Test
-    void test_whenGettingRoomById_givenInValidRoomId_ThrowNotFoundException(){
+    void test_whenGettingRoomById_givenInValidRoomId_throwNotFoundException(){
         Mockito.when(meetingRoomRepo.findById(Mockito.anyInt())).thenReturn(Optional.empty());
 
         NotFoundException thrownException = assertThrows(NotFoundException.class,()->{
-            meetingRoomService.getMeetingRoomId(100);
+            meetingRoomService.getMeetingRoomById(100);
         });
 
         assertEquals("Meeting room not found",thrownException.getMessage());
 
     }
-
 
 
 }

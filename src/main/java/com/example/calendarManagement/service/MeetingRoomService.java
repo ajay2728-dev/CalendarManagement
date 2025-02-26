@@ -1,6 +1,8 @@
 package com.example.calendarManagement.service;
 
+import com.example.calendarManagement.dto.MeetingResponseDTO;
 import com.example.calendarManagement.dto.MeetingRoomRequestDTO;
+import com.example.calendarManagement.dto.MeetingRoomResponseDTO;
 import com.example.calendarManagement.exception.ConstraintViolationException;
 import com.example.calendarManagement.exception.MissingFieldException;
 import com.example.calendarManagement.exception.NotFoundException;
@@ -22,64 +24,50 @@ public class MeetingRoomService {
     @Autowired
     private MeetingRoomRepo meetingRoomRepo;
 
-    public MeetingRoomModel addMeetingRoom(MeetingRoomRequestDTO meetingRoom)  {
-        // check missing input
+    public MeetingRoomModel addMeetingRoom(MeetingRoomRequestDTO meetingRoom, OfficeModel office)  {
 
-        if(meetingRoom.getRoomName()==null || meetingRoom.getOfficeId()==0){
-            throw new MissingFieldException("Missing Required Input");
-        }
-
-        // search valid office
-        Optional<OfficeModel> office = officeRepo.findById(meetingRoom.getOfficeId());
-        if(!office.isPresent()){
-            throw new NotFoundException("provided office not found");
-        }
-
-        // no. of office room
-        int countMeetingRoom = meetingRoomRepo.countByOffice(office.get());
-
-        if(countMeetingRoom>=10){
-            throw new ConstraintViolationException("Office Already have 10 meeting room");
-        }
-
-        int newMeetingRoomId = meetingRoomRepo.findAll().size()+1;
-        MeetingRoomModel newMeetingRoom = new MeetingRoomModel( newMeetingRoomId,
-                                                                meetingRoom.getRoomName(),
-                                                                office.get(), meetingRoom.isEnable() );
-
+        MeetingRoomModel newMeetingRoom = new MeetingRoomModel( meetingRoom.getRoomName(), office, meetingRoom.isEnable() );
         // add meetingRoom;
         MeetingRoomModel saveMeetingRoom = meetingRoomRepo.save(newMeetingRoom);
         return saveMeetingRoom;
     }
 
-    public MeetingRoomModel updateStatusMeetingRoom(MeetingRoomRequestDTO meetingRoom) {
-        // check missing attribute
-        if(meetingRoom.getRoomId()==0){
-            throw new MissingFieldException("Missing Required Input");
-        }
-
-        //check valid room id
-        Optional<MeetingRoomModel> exitingRoomOpt = meetingRoomRepo.findById(meetingRoom.getRoomId());
-        if(!exitingRoomOpt.isPresent()){
-            throw new NotFoundException("Room Not Found");
-        }
-
-        MeetingRoomModel exitingRoom = exitingRoomOpt.get();
-        exitingRoom.setEnable(meetingRoom.isEnable());
-
+    public MeetingRoomResponseDTO updateMeetingRoomStatusToEnable(MeetingRoomModel exitingRoom) {
         //update status of meeting room
+        exitingRoom.setEnable(true);
         MeetingRoomModel updateMeetingRoom = meetingRoomRepo.save(exitingRoom);
-        return updateMeetingRoom;
+
+        MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(updateMeetingRoom.getRoomId(),
+                updateMeetingRoom.getRoomName(),
+                updateMeetingRoom.getOffice().getOfficeId(),
+                updateMeetingRoom.isEnable());
+        return existingRoom;
+
     }
 
-    public MeetingRoomModel getMeetingRoomId(int meetingRoomId) {
+    public MeetingRoomResponseDTO updateMeetingRoomStatusToDisable(MeetingRoomModel exitingRoom) {
+        //update status of meeting room
+        exitingRoom.setEnable(false);
+        MeetingRoomModel updateMeetingRoom = meetingRoomRepo.save(exitingRoom);
+        MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(updateMeetingRoom.getRoomId(),
+                updateMeetingRoom.getRoomName(),
+                updateMeetingRoom.getOffice().getOfficeId(),
+                updateMeetingRoom.isEnable());
+
+        return existingRoom;
+    }
+
+    public MeetingRoomResponseDTO getMeetingRoomById(int meetingRoomId) {
         // check valid meeting room
         Optional<MeetingRoomModel> meetingRoomOpt = meetingRoomRepo.findById(meetingRoomId);
         if(!meetingRoomOpt.isPresent()){
             throw new NotFoundException("Meeting room not found");
         }
 
-        MeetingRoomModel exitingRoom = meetingRoomOpt.get();
-        return exitingRoom;
+        MeetingRoomResponseDTO existingRoom = new MeetingRoomResponseDTO(meetingRoomOpt.get().getRoomId(),
+                                                                 meetingRoomOpt.get().getRoomName(),
+                                                                 meetingRoomOpt.get().getOffice().getOfficeId(),
+                                                                 meetingRoomOpt.get().isEnable());
+        return existingRoom;
     }
 }

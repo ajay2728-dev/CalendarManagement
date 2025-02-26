@@ -1,13 +1,16 @@
 package com.example.calendarManagement.exception;
 
 import com.example.calendarManagement.dto.ResponseDTO;
+import com.example.thriftMeeting.MeetingException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,12 +18,19 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(TException.class)
-    public ResponseEntity<ResponseDTO> handleThriftServerException(TException ex){
-
+    @ExceptionHandler(MeetingException.class)
+    public ResponseEntity<ResponseDTO> MeetingException(MeetingException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
-        ResponseDTO response = new ResponseDTO("Error from Thrift server", 500, null, error);
+        ResponseDTO response = new ResponseDTO("Error from meeting scheduling", ex.getErrorCode(), null, error);
+        return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ResponseDTO> handleRuntimeException( RuntimeException ex){
+        Map<String, Object> error = new HashMap<>();
+        error.put("detail", ex.getMessage());
+        ResponseDTO response = new ResponseDTO("Error from Data base", 500, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -50,21 +60,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(response);
     }
 
-//    @ExceptionHandler(NonUniqueFieldException.class)
-//    public ResponseEntity<ResponseDTO> handleNonUniqueEmployeeEmailException(NonUniqueFieldException ex){
-//        Map<String, Object> error = new HashMap<>();
-//        error.put("detail", ex.getMessage());
-//
-//        ResponseDTO response = new ResponseDTO("Non Unique Data Added Error ", 400, null, error);
-//        return ResponseEntity.badRequest().body(response);
-//    }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseDTO> handleNotFoundEmployeeException(NotFoundException ex){
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Not Found Error", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Not Found Error", 404, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -76,7 +78,5 @@ public class GlobalExceptionHandler {
         ResponseDTO response = new ResponseDTO("Constrain Violated Error", 409, null, error);
         return ResponseEntity.badRequest().body(response);
     }
-
-//    @ExceptionHandler(NullPointerException)
 
 }
