@@ -21,6 +21,7 @@ public class ThriftMeetingService {
     private final IMeetingService.Client client;
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
+
     public ThriftMeetingService(){
         try {
             log.info("meeting thrift ...");
@@ -33,10 +34,8 @@ public class ThriftMeetingService {
         }
     }
 
-
     public Object canScheduleMeeting(IMeetingServiceDTO meetingServiceDTO) throws TException {
         try {
-
             log.info("making an can schedule call to thrift server ...");
             boolean response = client.canScheduleMeeting(meetingServiceDTO);
             log.info("response is come from thrift server ...");

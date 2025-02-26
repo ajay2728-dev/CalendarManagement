@@ -8,6 +8,7 @@ import com.example.calendarManagement.service.ThriftMeetingService;
 import com.example.calendarManagement.validator.MeetingValidator;
 import com.example.thriftMeeting.IMeetingService;
 import com.example.thriftMeeting.IMeetingServiceDTO;
+import com.example.thriftMeeting.MeetingException;
 import org.apache.thrift.TException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,12 +17,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Map;
 
-import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -32,16 +30,11 @@ public class ThriftMeetingServiceTest {
     private IMeetingServiceDTO meetingDTO;
 
     @InjectMocks
-    private ThriftMeetingService thriftMeetingService;
-
-    @InjectMocks
     private MeetingValidator meetingValidator;
 
     @Mock
     private EmployeeMeetingStatusModel employeeMeetingStatusModel;
 
-    @Mock
-    private IMeetingService.Client client;
 
     @BeforeEach
     void setup() {
@@ -139,6 +132,16 @@ public class ThriftMeetingServiceTest {
 
         assertDoesNotThrow(() -> meetingValidator.canScheduleValidator(meetingDTO));
     }
+
+//    @Test
+//    void testCanScheduleMeeting_whenSuccess() throws TException {
+//        IMeetingServiceDTO meetingServiceDTO = new IMeetingServiceDTO();
+//        when(client.canScheduleMeeting(Mockito.any(IMeetingServiceDTO.class))).thenReturn(true);
+//
+//        Map<String, Object> result = (Map<String, Object>) thriftMeetingService.canScheduleMeeting(meetingServiceDTO);
+//
+//        assertNotNull(result);
+//    }
 
 
 

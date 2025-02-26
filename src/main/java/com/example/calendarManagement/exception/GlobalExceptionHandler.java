@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
+import javax.annotation.Generated;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletionException;
 
 @Slf4j
 @RestControllerAdvice
@@ -66,7 +66,7 @@ public class GlobalExceptionHandler {
         Map<String, Object> error = new HashMap<>();
         error.put("detail", ex.getMessage());
 
-        ResponseDTO response = new ResponseDTO("Not Found Error", 400, null, error);
+        ResponseDTO response = new ResponseDTO("Not Found Error", 404, null, error);
         return ResponseEntity.badRequest().body(response);
     }
 
@@ -78,7 +78,5 @@ public class GlobalExceptionHandler {
         ResponseDTO response = new ResponseDTO("Constrain Violated Error", 409, null, error);
         return ResponseEntity.badRequest().body(response);
     }
-
-//    @ExceptionHandler(NullPointerException)
 
 }
